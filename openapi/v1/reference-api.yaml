@@ -60,6 +60,12 @@ tags:
     description: Proxy authorisations granted within an estate
   - name: DealerInterests
     description: Dealer and third-party interests registered against an estate
+  - name: Import/Export
+    description: Bulk import and export of complete INHERIT documents
+  - name: Validation
+    description: Progressive conformance validation of stored estates
+  - name: Couples
+    description: Companion estate linking for couples and household planning
 
 paths:
   /estates:
@@ -2609,6 +2615,198 @@ paths:
       responses:
         '204':
           description: DealerInterest deleted successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/export/json:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: exportEstateJson
+      summary: Export estate as INHERIT JSON document
+      description: |
+        Returns a complete INHERIT root document containing all entities for the
+        estate. The exportedAt, exportedBy, and generator fields are set by the
+        server at the time of export.
+      tags:
+        - Import/Export
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportJsonRequest'
+      responses:
+        '200':
+          description: INHERIT document exported successfully
+          content:
+            application/vnd.openinherit.v1+json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InheritDocument'
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/InheritDocument'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/export/pdf:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: exportEstatePdf
+      summary: Export estate as a PDF report
+      description: |
+        Renders a PDF report of the estate using the specified template.
+        Three templates are available: full (for the testator), summary (for
+        the family), and professional (for an estate planning professional).
+      tags:
+        - Import/Export
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExportPdfRequest'
+      responses:
+        '200':
+          description: PDF report generated successfully
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/import:
+    post:
+      operationId: importEstate
+      summary: Import an INHERIT JSON document as a new estate
+      description: |
+        Accepts a complete INHERIT JSON document and creates a new estate from it.
+        Level 1 conformance is required for import to succeed. Levels 2–3
+        produce non-fatal warnings included in the response.
+      tags:
+        - Import/Export
+      requestBody:
+        required: true
+        content:
+          application/vnd.openinherit.v1+json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InheritDocument'
+          application/json:
+            schema:
+              $ref: './openapi.yaml#/components/schemas/InheritDocument'
+      responses:
+        '201':
+          description: Estate imported successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImportResult'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+
+  /estates/{estateId}/validate:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    get:
+      operationId: validateEstate
+      summary: Validate a stored estate at all conformance levels
+      description: |
+        Validates the stored estate against all three INHERIT conformance levels
+        progressively. Returns detailed validation results including the highest
+        level achieved and any violations found at each level.
+      tags:
+        - Validation
+      responses:
+        '200':
+          description: Validation result returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/ValidationResult'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/companion:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    post:
+      operationId: linkCompanion
+      summary: Link a companion estate
+      description: |
+        Links another estate as a companion to this one, typically used for
+        couples where each partner has their own estate record. Both estates
+        must exist and must not already be linked to a companion.
+      tags:
+        - Couples
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanionLink'
+      responses:
+        '200':
+          description: Companion linked successfully
+          content:
+            application/json:
+              schema:
+                $ref: './openapi.yaml#/components/schemas/Estate'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+    get:
+      operationId: getCompanion
+      summary: Get the companion estate summary
+      description: |
+        Returns a summary of the estate linked as a companion to this one.
+        Returns 404 if this estate has no companion linked.
+      tags:
+        - Couples
+      responses:
+        '200':
+          description: Companion estate summary returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstateSummary'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: unlinkCompanion
+      summary: Unlink the companion estate
+      description: Removes the companion link between this estate and its companion.
+      tags:
+        - Couples
+      responses:
+        '204':
+          description: Companion unlinked successfully
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /estates/{estateId}/summary:
+    parameters:
+      - $ref: '#/components/parameters/estateId'
+    get:
+      operationId: getEstateSummary
+      summary: Get derived estate summary statistics
+      description: |
+        Returns derived statistics for the estate including entity counts,
+        estimated values, conformance level, completeness indicators, and
+        complexity indicators. Complexity data is used by the INHERIT matchmaker
+        to assess suitability for estate planning professional referral.
+      tags:
+        - Estates
+      responses:
+        '200':
+          description: Estate summary returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstateSummary'
         '404':
           $ref: '#/components/responses/NotFound'
 
