@@ -1,0 +1,28 @@
+# INHERIT CODEOWNERS
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Core schemas — require Rich's approval
+/v1/*.json                            @richardd
+/v1/common/**                         @richardd
+/openapi/**                           @richardd
+
+# Core extensions — jurisdiction partners
+# As partners are onboarded, their GitHub usernames replace @testate-team
+/v1/extensions/uk-england-wales/**    @testate-team
+/v1/extensions/islamic/**             @testate-team
+/v1/extensions/jewish/**              @testate-team
+/v1/extensions/india-hindu/**         @testate-team
+/v1/extensions/japan/**               @testate-team
+/v1/extensions/africa-customary/**    @testate-team
+/v1/extensions/us-estate/**           @testate-team
+/v1/extensions/canada/**              @testate-team
+/v1/extensions/australia-nz/**        @testate-team
+/v1/extensions/eu-succession/**       @testate-team
+/v1/extensions/prc-china/**           @testate-team
+/v1/extensions/singapore-malaysia/**  @testate-team
+/v1/extensions/latin-america/**       @testate-team
+
+# Governance docs — Rich only
+/GOVERNANCE.md                        @richardd
+/CONTRIBUTING.md                      @richardd
+/SECURITY.md                          @richardd
