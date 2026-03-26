@@ -1,0 +1,50 @@
+{
+  "name": "@openinherit/sdk",
+  "version": "1.0.0",
+  "description": "INHERIT estate planning SDK — TypeScript types and API client stubs",
+  "type": "module",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/openinherit/openinherit.git",
+    "directory": "packages/sdk"
+  },
+  "homepage": "https://github.com/openinherit/openinherit",
+  "exports": {
+    ".": {
+      "types": "./dist/estate/index.d.ts",
+      "import": "./dist/estate/index.js"
+    },
+    "./reference": {
+      "types": "./dist/reference/index.d.ts",
+      "import": "./dist/reference/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "@hey-api/client-fetch": ">=0.1.0"
+  },
+  "devDependencies": {
+    "@hey-api/client-fetch": "latest",
+    "typescript": "^5.7.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "inherit",
+    "estate-planning",
+    "typescript",
+    "api-client",
+    "probate",
+    "wills",
+    "trusts",
+    "open-data"
+  ]
+}
