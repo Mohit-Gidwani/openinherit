@@ -12,7 +12,10 @@
     "bundle": "npx @redocly/cli bundle openapi/v1/openapi.yaml -o openapi/v1/openapi-bundled.yaml",
     "lint:reference-api": "npx @redocly/cli lint openapi/v1/reference-api.yaml",
     "bundle:reference-api": "npx @redocly/cli bundle openapi/v1/reference-api.yaml -o openapi/v1/reference-api-bundled.yaml",
-    "generate:reference-api": "npx @hey-api/openapi-ts -i openapi/v1/reference-api-bundled.yaml -o generated/typescript-api -c @hey-api/client-fetch"
+    "generate:reference-api": "npx @hey-api/openapi-ts -i openapi/v1/reference-api-bundled.yaml -o generated/typescript-api -c @hey-api/client-fetch",
+    "build": "pnpm --filter @openinherit/sdk run build",
+    "build:sdk": "pnpm --filter @openinherit/sdk run build",
+    "clean": "pnpm --filter @openinherit/sdk run clean"
   },
   "devDependencies": {
     "@hey-api/openapi-ts": "latest",
