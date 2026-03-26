@@ -8,7 +8,7 @@
     "validate": "node scripts/validate-schemas.mjs",
     "lint:openapi": "npx @redocly/cli lint openapi/v1/openapi.yaml",
     "test": "node scripts/run-tests.mjs",
-    "generate": "npx @hey-api/openapi-ts -i openapi/v1/openapi.yaml -o generated/typescript -c @hey-api/client-fetch",
+    "generate": "npx @hey-api/openapi-ts -i openapi/v1/openapi-bundled.yaml -o generated/typescript -c @hey-api/client-fetch",
     "bundle": "npx @redocly/cli bundle openapi/v1/openapi.yaml -o openapi/v1/openapi-bundled.yaml"
   },
   "devDependencies": {
