@@ -2267,6 +2267,12 @@ components:
               type: boolean
               $comment: Whether the user set access directives via the platform's own tool (takes priority under RUFADAA).
           additionalProperties: false
+        collectionId:
+          type: string
+          format: uuid
+          description: Links this asset to an asset collection
+          examples:
+            - b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8
         passesOutsideEstate:
           type: boolean
           $comment: True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will.
@@ -2276,6 +2282,190 @@ components:
         - id
         - name
         - category
+      patternProperties:
+        ^x-inherit-: {}
+      unevaluatedProperties: false
+    asset-collection:
+      $schema: https://openinherit.org/v1/dialect.json
+      $id: https://openinherit.org/v1/asset-collection.json
+      title: Asset Collection
+      description: A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for this asset collection
+          examples:
+            - b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8
+        estateId:
+          type: string
+          format: uuid
+          description: The estate this collection belongs to
+          examples:
+            - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        name:
+          type: string
+          minLength: 1
+          description: Display name for this collection
+          examples:
+            - Model railway collection
+            - Vinyl record library
+            - Japanese woodblock prints
+        description:
+          type: string
+          description: Context for family members and dealers about the collection's scope, provenance, or significance
+          examples:
+            - OO gauge collection started in 1985, mostly Hornby with some Lima coaches. Layout stored in the loft at Oakfield Road.
+        category:
+          type: string
+          enum:
+            - model_railways
+            - vinyl_records
+            - art
+            - jewellery
+            - wine
+            - stamps
+            - coins
+            - books
+            - musical_instruments
+            - fishing_gear
+            - handbags
+            - power_tools
+            - watches
+            - ceramics
+            - memorabilia
+            - other
+          $comment: Broad category for the collection. Use 'other' for niche collections (e.g. vintage typewriters, fountain pens). Individual assets within the collection may have more specific categories.
+          description: The primary category of items in this collection
+          examples:
+            - model_railways
+            - vinyl_records
+            - art
+        estimatedValue:
+          $ref: '#/components/schemas/money'
+          description: Estimated total value of the collection as a whole
+          examples:
+            - amount: 1500000
+              currency: GBP
+        valuationSource:
+          type: string
+          enum:
+            - self_estimated
+            - dealer_valuation
+            - auction_estimate
+            - insurance_value
+          $comment: self_estimated = owner's own guess. dealer_valuation = assessed by a specialist dealer. auction_estimate = provided by an auction house. insurance_value = the insured replacement value.
+          description: How the estimated value was determined
+          examples:
+            - dealer_valuation
+        valuationDate:
+          type: string
+          format: date
+          description: Date the valuation was performed or last updated
+          examples:
+            - '2025-11-15'
+        disposalWishes:
+          type: string
+          description: Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc.
+          examples:
+            - Keep together if possible. Contact Dave at Manchester Model Railway Club — he knows the right dealers. Do not sell on eBay individually.
+        notes:
+          type: string
+          description: Any additional notes about this collection
+          examples:
+            - Insurance policy with Hiscox, ref HX-2024-1234. Photos in Google Drive folder 'Railway Collection'.
+      required:
+        - id
+        - estateId
+        - name
+      patternProperties:
+        ^x-inherit-: {}
+      unevaluatedProperties: false
+    asset-interest:
+      $schema: https://openinherit.org/v1/dialect.json
+      $id: https://openinherit.org/v1/asset-interest.json
+      title: Asset Interest
+      description: Captures informal beneficiary interest in an asset or collection — pre-bequest soft preferences. Not legally binding. Helps the testator understand who wants what before making formal bequests.
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for this interest record
+          examples:
+            - c3d4e5f6-a7b8-9012-cdef-3456789abcde
+        estateId:
+          type: string
+          format: uuid
+          description: The estate this interest relates to
+          examples:
+            - a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        assetId:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Reference to a specific Asset.id, if the interest is in a single asset
+          examples:
+            - d4e5f6a7-b8c9-0123-def4-56789abcdef0
+        collectionId:
+          type:
+            - string
+            - 'null'
+          format: uuid
+          description: Reference to an AssetCollection.id, if the interest is in an entire collection
+          examples:
+            - b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8
+        personId:
+          type: string
+          format: uuid
+          description: The person expressing interest (must be a Person.id with a beneficiary role)
+          examples:
+            - e5f6a7b8-c9d0-1234-ef56-789abcdef012
+        interestLevel:
+          type: string
+          enum:
+            - mentioned
+            - expressed_interest
+            - strongly_wants
+            - agreed
+          $comment: mentioned = came up in conversation but no strong feeling. expressed_interest = person said they'd like it. strongly_wants = person has made it clear this matters to them. agreed = testator and beneficiary have informally agreed.
+          description: How strongly the beneficiary has expressed interest
+          examples:
+            - expressed_interest
+            - agreed
+        sourceType:
+          type: string
+          enum:
+            - family_conversation
+            - written_request
+            - chat_message
+            - proxy_reported
+            - testator_observed
+            - manual
+          $comment: family_conversation = mentioned during a family discussion. written_request = beneficiary put it in writing. chat_message = expressed via the platform's messaging. proxy_reported = a proxy relayed the interest on behalf of the beneficiary. testator_observed = testator noticed the person's attachment without them asking. manual = entered directly by the testator or proxy.
+          description: How this interest was communicated or recorded
+          examples:
+            - family_conversation
+            - testator_observed
+        testatorAcknowledged:
+          type: boolean
+          default: false
+          description: Whether the testator has seen and acknowledged this interest
+          examples:
+            - true
+            - false
+        notes:
+          type: string
+          description: Additional context about this interest
+          examples:
+            - Sarah mentioned at Christmas 2024 that she'd love Mum's engagement ring. Mum seemed pleased.
+      required:
+        - id
+        - estateId
+        - personId
+        - interestLevel
       patternProperties:
         ^x-inherit-: {}
       unevaluatedProperties: false
@@ -3453,6 +3643,25 @@ components:
         documentRef:
           type: string
       additionalProperties: false
+    visibility:
+      $schema: https://openinherit.org/v1/dialect.json
+      $id: https://openinherit.org/v1/common/visibility.json
+      title: Visibility
+      description: Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records.
+      type: string
+      enum:
+        - testator_only
+        - proxy_visible
+        - companion_visible
+        - executor_visible
+        - beneficiary_visible
+        - all_parties
+      $comment: testator_only = only the testator can see this record. proxy_visible = testator and their authorised proxies. companion_visible = testator, proxies, and companions (e.g. spouse). executor_visible = visible to named executors as well. beneficiary_visible = visible to named beneficiaries. all_parties = no restriction, visible to all parties with estate access.
+      default: all_parties
+      examples:
+        - testator_only
+        - executor_visible
+        - all_parties
     dealer-interest:
       $schema: https://openinherit.org/v1/dialect.json
       $id: https://openinherit.org/v1/dealer-interest.json
@@ -3589,12 +3798,8 @@ components:
           type: string
           format: uuid
         privacyLevel:
-          type: string
-          enum:
-            - testator_only
-            - proxy_visible
-            - executor_visible
-            - all_parties
+          $ref: '#/components/schemas/visibility'
+          description: Controls which parties can see this dealer interest record
         communicationInitiatedBy:
           type: string
           enum:
@@ -3684,6 +3889,14 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/asset'
+        assetCollections:
+          type: array
+          items:
+            $ref: '#/components/schemas/asset-collection'
+        assetInterests:
+          type: array
+          items:
+            $ref: '#/components/schemas/asset-interest'
         liabilities:
           type: array
           items:
@@ -3738,6 +3951,8 @@ components:
         - relationships
         - properties
         - assets
+        - assetCollections
+        - assetInterests
         - liabilities
         - bequests
         - trusts

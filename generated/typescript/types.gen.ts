@@ -948,6 +948,10 @@ export type Asset2 = {
         designatedRecipientPersonId?: string;
         onlineToolDirective?: boolean;
     };
+    /**
+     * Links this asset to an asset collection
+     */
+    collectionId?: string;
     passesOutsideEstate?: boolean;
     notes?: string;
     [key: string]: unknown | string | string | 'bank_account' | 'savings_account' | 'investment' | 'pension' | 'shares' | 'premium_bonds' | 'cryptocurrency' | 'insurance' | 'vehicle' | 'jewellery' | 'art' | 'antiques' | 'collectibles' | 'furniture' | 'electronics' | 'musical_instruments' | 'books' | 'clothing' | 'kitchenware' | 'sports_equipment' | 'firearms' | 'wine_and_spirits' | 'tools' | 'garden_and_outdoor' | 'business_interest' | 'intellectual_property' | 'domain_name' | 'social_media_account' | 'digital_subscription' | 'sukuk' | 'takaful' | 'islamic_deposit' | 'other' | string | Money2 | string | 'estimated' | 'professional' | 'probate' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | Array<Identifier2> | Array<Photo> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | {
@@ -965,6 +969,100 @@ export type Asset2 = {
         designatedRecipientPersonId?: string;
         onlineToolDirective?: boolean;
     } | boolean | undefined;
+};
+
+/**
+ * Asset Collection
+ *
+ * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set.
+ */
+export type AssetCollection = {
+    /**
+     * Unique identifier for this asset collection
+     */
+    id: string;
+    /**
+     * The estate this collection belongs to
+     */
+    estateId: string;
+    /**
+     * Display name for this collection
+     */
+    name: string;
+    /**
+     * Context for family members and dealers about the collection's scope, provenance, or significance
+     */
+    description?: string;
+    /**
+     * The primary category of items in this collection
+     */
+    category?: 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other';
+    /**
+     * Estimated total value of the collection as a whole
+     */
+    estimatedValue?: Money2;
+    /**
+     * How the estimated value was determined
+     */
+    valuationSource?: 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value';
+    /**
+     * Date the valuation was performed or last updated
+     */
+    valuationDate?: string;
+    /**
+     * Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc.
+     */
+    disposalWishes?: string;
+    /**
+     * Any additional notes about this collection
+     */
+    notes?: string;
+    [key: string]: unknown | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | undefined;
+};
+
+/**
+ * Asset Interest
+ *
+ * Captures informal beneficiary interest in an asset or collection — pre-bequest soft preferences. Not legally binding. Helps the testator understand who wants what before making formal bequests.
+ */
+export type AssetInterest = {
+    /**
+     * Unique identifier for this interest record
+     */
+    id: string;
+    /**
+     * The estate this interest relates to
+     */
+    estateId: string;
+    /**
+     * Reference to a specific Asset.id, if the interest is in a single asset
+     */
+    assetId?: string | null;
+    /**
+     * Reference to an AssetCollection.id, if the interest is in an entire collection
+     */
+    collectionId?: string | null;
+    /**
+     * The person expressing interest (must be a Person.id with a beneficiary role)
+     */
+    personId: string;
+    /**
+     * How strongly the beneficiary has expressed interest
+     */
+    interestLevel: 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed';
+    /**
+     * How this interest was communicated or recorded
+     */
+    sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'proxy_reported' | 'testator_observed' | 'manual';
+    /**
+     * Whether the testator has seen and acknowledged this interest
+     */
+    testatorAcknowledged?: boolean;
+    /**
+     * Additional context about this interest
+     */
+    notes?: string;
+    [key: string]: unknown | string | string | null | string | null | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | string | undefined;
 };
 
 /**
@@ -1341,6 +1439,13 @@ export type OfferDetails = {
 };
 
 /**
+ * Visibility
+ *
+ * Reusable visibility level controlling which parties can see an entity. Used across dealer interests, asset interests, and other privacy-sensitive records.
+ */
+export type Visibility = 'testator_only' | 'proxy_visible' | 'companion_visible' | 'executor_visible' | 'beneficiary_visible' | 'all_parties';
+
+/**
  * Dealer Interest
  *
  * Level D data — records third-party interest in estate assets (art dealers, property investors, collectors). Privacy-controlled. Managed via proxy authorisation.
@@ -1354,11 +1459,14 @@ export type DealerInterest2 = {
     offerDetails?: OfferDetails;
     testatorDisposition?: 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided';
     linkedBequestId?: string;
-    privacyLevel: 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties';
+    /**
+     * Controls which parties can see this dealer interest record
+     */
+    privacyLevel: Visibility;
     communicationInitiatedBy?: 'buyer' | 'testator' | 'proxy' | 'executor';
     managedByProxyId?: string;
     notes?: string;
-    [key: string]: unknown | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | 'testator_only' | 'proxy_visible' | 'executor_visible' | 'all_parties' | 'buyer' | 'testator' | 'proxy' | 'executor' | string | undefined;
+    [key: string]: unknown | string | InterestedParty | Array<AssetInterestItem> | CollectionInterest | 'standing_interest' | 'verbal_offer' | 'written_offer' | 'formal_valuation' | 'conditional_offer' | 'accepted' | 'declined' | 'expired' | 'withdrawn' | OfferDetails | 'willing_to_sell' | 'prefer_not_to_sell' | 'hold_for_executor' | 'deferred_to_family' | 'promised_to_institution' | 'undecided' | Visibility | 'buyer' | 'testator' | 'proxy' | 'executor' | string | undefined;
 };
 
 /**
@@ -1390,6 +1498,8 @@ export type Schema = {
     relationships: Array<Relationship2>;
     properties: Array<Property2>;
     assets: Array<Asset2>;
+    assetCollections: Array<AssetCollection>;
+    assetInterests: Array<AssetInterest>;
     liabilities: Array<Liability2>;
     bequests: Array<Bequest2>;
     trusts: Array<Trust2>;
@@ -1409,7 +1519,7 @@ export type Schema = {
         name: string;
         version?: string;
         url?: string;
-    } | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<DealerInterest2> | Array<string> | undefined;
+    } | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<AssetCollection> | Array<AssetInterest> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<DealerInterest2> | Array<string> | undefined;
 };
 
 /**
