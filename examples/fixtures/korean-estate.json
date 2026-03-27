@@ -1,0 +1,203 @@
+{
+  "inherit": "https://openinherit.org/v1/schema.json",
+  "version": 1,
+  "exportedAt": "2026-03-27",
+  "generator": {
+    "name": "INHERIT Examples",
+    "version": "1.0.0"
+  },
+  "estate": {
+    "id": "e0000010-0000-4000-a000-000000000001",
+    "testatorPersonId": "a1000010-0000-4000-a000-000000000001",
+    "status": "active",
+    "jurisdiction": {
+      "country": "KR",
+      "legalSystem": "civil_law",
+      "name": "South Korea"
+    },
+    "forcedHeirship": {
+      "applies": true,
+      "reservedPortion": 50,
+      "disposableQuota": 50,
+      "claimNature": "cash_claim",
+      "calculationBasis": "per_child_sliding",
+      "applicableTo": "children_and_spouse",
+      "notes": "Korean Civil Code Articles 1112-1118 govern the yuryubun (유류분) — the legally reserved portion. A spouse and lineal descendants may claim one-half of their statutory intestate share. Lineal ascendants and siblings may claim one-third. The yuryubun claim is monetary and must be exercised within one year of learning of the infringement, or within ten years of the testator's death."
+    },
+    "notes": "Korean succession is governed by the Korean Civil Code (민법), Book V: Succession (Articles 1000-1118). A will (유언) may be holographic (자필증서), audio/video recorded (녹음), notarised (공정증서), sealed (비밀증서), or orally dictated (구수증서). Intestate shares follow Article 1009: a spouse receives 1.5× a child's share. The Family Court (가정법원) handles probate. Korea has no inheritance tax exemption for the primary residence — estate tax applies to worldwide assets.",
+    "createdAt": "2026-01-15",
+    "lastModifiedAt": "2026-03-27"
+  },
+  "people": [
+    {
+      "id": "a1000010-0000-4000-a000-000000000001",
+      "givenName": "Soo-jin",
+      "familyName": "Kim",
+      "phoneticReading": {
+        "givenName": "수진",
+        "familyName": "김"
+      },
+      "dateOfBirth": "1965-04-10",
+      "roles": [
+        "testator"
+      ],
+      "language": "ko",
+      "contact": {
+        "address": {
+          "addressCountry": "KR",
+          "addressRegion": "Seoul",
+          "addressLocality": "Gangnam-gu",
+          "streetAddress": "Teheran-ro 152, Apt 3204",
+          "postalCode": "06236",
+          "addressOrder": "japanese"
+        }
+      }
+    },
+    {
+      "id": "a1000010-0000-4000-a000-000000000002",
+      "givenName": "Min-ho",
+      "familyName": "Park",
+      "phoneticReading": {
+        "givenName": "민호",
+        "familyName": "박"
+      },
+      "dateOfBirth": "1967-09-22",
+      "roles": [
+        "beneficiary",
+        "executor"
+      ],
+      "language": "ko"
+    },
+    {
+      "id": "a1000010-0000-4000-a000-000000000003",
+      "givenName": "Ji-yeon",
+      "familyName": "Kim",
+      "phoneticReading": {
+        "givenName": "지연",
+        "familyName": "김"
+      },
+      "dateOfBirth": "1995-06-18",
+      "roles": [
+        "beneficiary"
+      ],
+      "language": "ko"
+    }
+  ],
+  "kinships": [
+    {
+      "id": "c1000010-0000-4000-a000-000000000001",
+      "type": "PARENT_CHILD_BIOLOGICAL",
+      "fromPersonId": "a1000010-0000-4000-a000-000000000001",
+      "toPersonId": "a1000010-0000-4000-a000-000000000003"
+    }
+  ],
+  "relationships": [
+    {
+      "id": "d1000010-0000-4000-a000-000000000001",
+      "type": "MARRIAGE_CIVIL",
+      "partners": [
+        {
+          "personId": "a1000010-0000-4000-a000-000000000001",
+          "ordinal": 1
+        },
+        {
+          "personId": "a1000010-0000-4000-a000-000000000002",
+          "ordinal": 2
+        }
+      ],
+      "currentStatus": "ACTIVE",
+      "jurisdiction": {
+        "country": "KR"
+      }
+    }
+  ],
+  "properties": [
+    {
+      "id": "f1000010-0000-4000-a000-000000000001",
+      "name": "Gangnam Apartment, Teheran-ro 152",
+      "propertyType": "flat",
+      "tenureType": "freehold",
+      "isPrimaryResidence": true,
+      "ownershipType": "sole",
+      "estimatedValue": {
+        "amount": 1800000000,
+        "currency": "KRW"
+      },
+      "address": {
+        "addressCountry": "KR",
+        "addressRegion": "Seoul",
+        "addressLocality": "Gangnam-gu",
+        "streetAddress": "Teheran-ro 152, Apt 3204",
+        "postalCode": "06236",
+        "addressOrder": "japanese"
+      },
+      "notes": "KRW has ISO 4217 exponent 0 — the amount field IS the face value. 1,800,000,000 KRW ≈ ₩1.8 billion (approx. USD 1.35M). Korean apartment ownership is full ownership (소유권) of the unit plus a proportional share of the common areas and land. This is distinct from jeonse tenants who hold a deposit right, not ownership."
+    }
+  ],
+  "assets": [
+    {
+      "id": "51000010-0000-4000-a000-000000000001",
+      "name": "Shinhan Bank Savings Account",
+      "category": "savings_account",
+      "estimatedValue": {
+        "amount": 450000000,
+        "currency": "KRW"
+      },
+      "notes": "₩450,000,000 held in a Shinhan Bank savings account. Korean bank accounts are frozen upon death — the Family Court must issue a certificate of inheritance (상속재산분할협의서) or court order before funds are released."
+    },
+    {
+      "id": "51000010-0000-4000-a000-000000000002",
+      "name": "Samsung Securities Investment Account",
+      "category": "investment",
+      "estimatedValue": {
+        "amount": 300000000,
+        "currency": "KRW"
+      },
+      "notes": "₩300,000,000 in Korean equities and ETFs held at Samsung Securities."
+    },
+    {
+      "id": "51000010-0000-4000-a000-000000000003",
+      "name": "Jeonse (전세) Deposit — Mapo-gu Apartment",
+      "category": "other",
+      "subcategory": "jeonse_deposit",
+      "estimatedValue": {
+        "amount": 500000000,
+        "currency": "KRW"
+      },
+      "notes": "Jeonse (전세) is a uniquely Korean housing deposit system where a tenant pays a large lump-sum deposit (typically 50-80% of the property value) instead of monthly rent. The landlord returns the full deposit at the end of the lease (usually 2 years). The jeonse deposit is a receivable asset of the estate — the executor must arrange return from the landlord upon lease termination. Under the Housing Lease Protection Act (주택임대차보호법), the deposit has priority-creditor protection if the lease was registered. Categorised as 'other' with subcategory 'jeonse_deposit' because no standard asset category covers this Korean-specific concept."
+    }
+  ],
+  "assetCollections": [],
+  "assetInterests": [],
+  "liabilities": [],
+  "bequests": [
+    {
+      "id": "b1000010-0000-4000-a000-000000000001",
+      "type": "specific",
+      "beneficiaryId": "a1000010-0000-4000-a000-000000000002",
+      "description": "I give my apartment at Teheran-ro 152, Gangnam-gu, Seoul to my husband Park Min-ho.",
+      "notes": "Under Korean Civil Code Article 1009, the surviving spouse's intestate share is 1.5× a child's share. By specifically bequeathing the apartment, the testator ensures Min-ho receives the primary residence without the need for partition proceedings (상속재산분할)."
+    },
+    {
+      "id": "b1000010-0000-4000-a000-000000000002",
+      "type": "residuary",
+      "beneficiaryId": "a1000010-0000-4000-a000-000000000003",
+      "description": "I give the residue of my estate, including the jeonse deposit and all financial accounts, to my daughter Kim Ji-yeon."
+    }
+  ],
+  "trusts": [],
+  "executors": [
+    {
+      "id": "e1000010-0000-4000-a000-000000000001",
+      "personId": "a1000010-0000-4000-a000-000000000002",
+      "role": "primary"
+    }
+  ],
+  "guardians": [],
+  "wishes": [],
+  "documents": [],
+  "nonprobateTransfers": [],
+  "proxyAuthorisations": [],
+  "dealerInterests": [],
+  "extensions": []
+}
