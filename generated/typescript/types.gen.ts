@@ -2206,6 +2206,104 @@ export type Asset2 = {
 };
 
 /**
+ * Asset Collection
+ *
+ * A named group of related assets — e.g. a model railway collection, vinyl record library, or art portfolio. Lets families and dealers understand which items belong together and should be considered as a set.
+ */
+export type AssetCollection = {
+    /**
+     * Unique identifier for this asset collection
+     */
+    id: string;
+    /**
+     * The estate this collection belongs to
+     */
+    estateId: string;
+    /**
+     * Display name for this collection
+     */
+    name: string;
+    /**
+     * Context for family members and dealers about the collection's scope, provenance, or significance
+     */
+    description?: string;
+    /**
+     * The primary category of items in this collection
+     */
+    category?: 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other';
+    /**
+     * Estimated total value of the collection as a whole
+     */
+    estimatedValue?: Money2;
+    /**
+     * How the estimated value was determined
+     */
+    valuationSource?: 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value';
+    /**
+     * Date the valuation was performed or last updated
+     */
+    valuationDate?: string;
+    /**
+     * Free-text guidance from the testator about what should happen to this collection — keep together, sell at auction, donate to a museum, etc.
+     */
+    disposalWishes?: string;
+    /**
+     * Any additional notes about this collection
+     */
+    notes?: string;
+    /**
+     * Overview photographs and videos of the collection as a whole — the display, the storage, the scale of the collection.
+     */
+    images?: Array<Media>;
+    [key: string]: unknown | string | string | string | 'model_railways' | 'vinyl_records' | 'art' | 'jewellery' | 'wine' | 'stamps' | 'coins' | 'books' | 'musical_instruments' | 'fishing_gear' | 'handbags' | 'power_tools' | 'watches' | 'ceramics' | 'memorabilia' | 'other' | Money2 | 'self_estimated' | 'dealer_valuation' | 'auction_estimate' | 'insurance_value' | string | Array<Media> | undefined;
+};
+
+/**
+ * Asset Interest
+ *
+ * Captures informal beneficiary interest in an asset or collection — pre-bequest soft preferences. Not legally binding. Helps the testator understand who wants what before making formal bequests.
+ */
+export type AssetInterest = {
+    /**
+     * Unique identifier for this interest record
+     */
+    id: string;
+    /**
+     * The estate this interest relates to
+     */
+    estateId: string;
+    /**
+     * Reference to a specific Asset.id, if the interest is in a single asset
+     */
+    assetId?: string | null;
+    /**
+     * Reference to an AssetCollection.id, if the interest is in an entire collection
+     */
+    collectionId?: string | null;
+    /**
+     * The person expressing interest (must be a Person.id with a beneficiary role)
+     */
+    personId: string;
+    /**
+     * How strongly the beneficiary has expressed interest
+     */
+    interestLevel: 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed';
+    /**
+     * How this interest was communicated or recorded
+     */
+    sourceType?: 'family_conversation' | 'written_request' | 'chat_message' | 'proxy_reported' | 'testator_observed' | 'manual';
+    /**
+     * Whether the testator has seen and acknowledged this interest
+     */
+    testatorAcknowledged?: boolean;
+    /**
+     * Additional context about this interest
+     */
+    notes?: string;
+    [key: string]: unknown | string | string | null | string | null | 'mentioned' | 'expressed_interest' | 'strongly_wants' | 'agreed' | 'family_conversation' | 'written_request' | 'chat_message' | 'proxy_reported' | 'testator_observed' | 'manual' | boolean | string | undefined;
+};
+
+/**
  * Liability
  *
  * A debt or financial obligation. Includes mortgages, loans, credit cards, and cultural obligations (mahr, ketubah debt, lobola) that are priority debts in certain jurisdictions.
@@ -3352,6 +3450,14 @@ export type Schema = {
      */
     assets: Array<Asset2>;
     /**
+     * Named groups of related assets — collections (model railways, art, wine, etc.) that have collective significance and value.
+     */
+    assetCollections?: Array<AssetCollection>;
+    /**
+     * Informal beneficiary interest in specific assets or collections, captured before formal bequest allocation.
+     */
+    assetInterests?: Array<AssetInterest>;
+    /**
      * Debts and financial obligations of the estate, including cultural obligations (mahr, ketubah debt).
      */
     liabilities: Array<Liability2>;
@@ -3421,7 +3527,7 @@ export type Schema = {
          * URL of the generating software or organisation.
          */
         url?: string;
-    } | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<DealerInterest2> | Array<string> | undefined;
+    } | Estate2 | Array<Person2> | Array<Kinship2> | Array<Relationship2> | Array<Property2> | Array<Asset2> | Array<AssetCollection> | Array<AssetInterest> | Array<Liability2> | Array<Bequest2> | Array<Trust2> | Array<Executor2> | Array<Guardian2> | Array<Wish2> | Array<Document2> | Array<NonprobateTransfer2> | Array<ProxyAuthorisation2> | Array<DealerInterest2> | Array<string> | undefined;
 };
 
 /**
