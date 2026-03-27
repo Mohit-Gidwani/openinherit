@@ -19,6 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - TypeScript code blocks added to the primer alongside existing JSON examples
 - 5 good-first-issue GitHub issues for community contributors
 - Self-hosted scanner guide (`docs/self-hosted-scanner.md`) — run extraction on your own infrastructure
+- `formattedAddress` field on `common/address.json` — preserves original address text alongside structured fields (#19)
+- `schemaVersion` field on root schema — enables version detection and graceful degradation (#16)
+- Versioning and compatibility policy (`docs/versioning.md`) — maturity levels, breaking change definitions, forward/backward compatibility guidance (#16)
+- Concrete partnership expectations in `docs/partners/becoming-a-partner.md` — time commitment, exclusivity, marketing, consulting support
+- Legal review status section in `docs/extension-guide.md` — Reviewed / Legislation-based / Community tiers
+- Legal tech integration guide (`docs/legal-tech-integration.md`) — field mappings for Clio, LEAP, Actionstep, PracticePanther
 - Concrete partnership expectations in `docs/partners/becoming-a-partner.md` — time commitment, exclusivity, marketing, consulting support
 - Legal review status section in `docs/extension-guide.md` — Reviewed / Legislation-based / Community tiers
 - Legal tech integration guide (`docs/legal-tech-integration.md`) — field mappings for Clio, LEAP, Actionstep, PracticePanther
