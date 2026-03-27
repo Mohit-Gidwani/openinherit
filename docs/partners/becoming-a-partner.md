@@ -55,3 +55,57 @@ Email **partners@openinherit.org** with:
 4. Whether you'd prefer to contribute technically or have us handle implementation
 
 We'll arrange a call to discuss the partnership in detail.
+
+---
+
+## What Partnership Looks Like in Practice
+
+### Exclusivity
+
+One partner firm per jurisdiction. This is an exclusive relationship — your firm is the sole partner for your jurisdiction. No other firm will be onboarded for the same jurisdiction while your partnership is active.
+
+### Time Commitment
+
+- **Quarterly review (2–4 hours):** Review your extension for legal accuracy against current legislation. Update any thresholds or rules that have changed.
+- **Legislation changes (as needed):** When laws change in your jurisdiction, update the extension within 30 days. Urgent changes (overnight threshold changes) are fast-tracked.
+- **Community questions (occasional):** Answer questions from developers about your jurisdiction's succession law. Typically 1–2 per month.
+- **Annual steering committee (2 hours):** Review the standard's direction, propose changes, vote on breaking changes.
+
+### Technical Requirements
+
+- A GitHub account (free)
+- Basic familiarity with JSON (we provide training if needed)
+- OR: provide legal expertise only — we handle the technical implementation and you review for accuracy
+
+### What We Handle
+
+- All technical implementation (JSON Schema, testing, CI)
+- SDK generation and npm publishing
+- Website documentation updates
+- Developer support for integration questions
+- Infrastructure and hosting
+- Co-ordination of advertising within each jurisdiction (working with your marketing department)
+
+### What the Partner Handles
+
+- Legal accuracy of your jurisdiction extension
+- Regulatory cover for advice-tier content
+- Promoting [www.MyFamilyInherits.com](https://www.myfamilyinherits.com) in your jurisdiction
+
+### Marketing & Promotion
+
+The partner is responsible for promoting www.MyFamilyInherits.com in their jurisdiction. Testate Technologies can provide advice and support relating to marketing activities, including strategy, materials, and co-ordination with your marketing department. The partner pays all advertising expenses.
+
+Partners are expected to make a minimum annual commitment to marketing spend, linked to a percentage of their revenue share from MyFamilyInherits.com activity — the exact percentage is agreed per partnership. This ensures both parties are invested in growing awareness in each jurisdiction.
+
+### Consulting Support
+
+Testate Technologies can support partners developing their own software and tools that integrate with INHERIT. Day rates are discussed individually — contact us for details.
+
+### Commercial Terms
+
+Revenue share on premium (Level 2) licences and all commercial terms are discussed individually with each partner firm. Contact [partners@openinherit.org](mailto:partners@openinherit.org) for a confidential conversation.
+
+### Important
+
+Testate Technologies Ltd is a software company. It does not provide legal advice. The partner firm provides the legal expertise and regulatory cover — Testate Technologies provides the technology platform.
