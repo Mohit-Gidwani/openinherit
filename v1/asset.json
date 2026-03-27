@@ -131,6 +131,14 @@
       "description": "Links this asset to an asset collection",
       "examples": ["b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8"]
     },
+    "ownershipCategory": {
+      "type": "string",
+      "enum": ["joint", "sole_partner_interest", "sole_no_partner_interest", "sole"],
+      "default": "sole",
+      "description": "How this asset relates to a companion estate. Determines sync behaviour and visibility between linked estates.",
+      "$comment": "joint = both partners own it. sole_partner_interest = one partner owns it, the other can see it (read-only). sole_no_partner_interest = one partner owns it privately. sole = default for non-coupled estates. See docs/companion-estates.md.",
+      "examples": ["joint", "sole_partner_interest", "sole"]
+    },
     "passesOutsideEstate": {
       "type": "boolean",
       "$comment": "True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will."

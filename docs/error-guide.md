@@ -298,6 +298,223 @@ When Level 3 checking is available, it will verify that jurisdiction-required fi
 
 ---
 
+### 11. `must match format "date"`
+
+**What it means:** Date fields in INHERIT require ISO 8601 format: `YYYY-MM-DD`. Other date formats — UK (`DD/MM/YYYY`), US (`MM/DD/YYYY`), or natural language (`12 March 2026`) — are rejected.
+
+**Fix:**
+
+```typescript
+// Wrong — UK date format
+const estate = {
+  id: crypto.randomUUID(),
+  testatorPersonId: "aaaa-bbbb-cccc-dddd",
+  status: "draft",
+  jurisdiction: { country: "GB", subdivision: "GB-ENG" },
+  createdAt: "26/03/2026",       // DD/MM/YYYY — not ISO 8601
+  lastModifiedAt: "26/03/2026",
+};
+
+// Wrong — US date format
+const estate = {
+  // ...
+  createdAt: "03-26-2026",       // MM-DD-YYYY — not ISO 8601
+};
+
+// Wrong — natural language
+const estate = {
+  // ...
+  createdAt: "March 26, 2026",   // not machine-parseable
+};
+
+// Correct — ISO 8601 date
+const estate = {
+  id: crypto.randomUUID(),
+  testatorPersonId: "aaaa-bbbb-cccc-dddd",
+  status: "draft",
+  jurisdiction: { country: "GB", subdivision: "GB-ENG" },
+  createdAt: "2026-03-26",       // YYYY-MM-DD
+  lastModifiedAt: "2026-03-26",
+};
+```
+
+**Conversion tip:** `new Date().toISOString().split('T')[0]` produces the correct format in JavaScript/TypeScript.
+
+---
+
+### 12. Missing required entity arrays
+
+**What it means:** The root INHERIT document requires all entity arrays to be present, even if they are empty. If you omit `trusts`, `guardians`, `wishes`, or any other entity array, the document fails validation.
+
+**AJV error:** `must have required property 'trusts'` (or whichever array is missing)
+
+**Fix:**
+
+```typescript
+// Wrong — only includes arrays that have data
+const doc = {
+  inherit: "https://openinherit.org/v1/schema.json",
+  version: 1,
+  estate: { /* ... */ },
+  people: [{ /* ... */ }],
+  bequests: [{ /* ... */ }],
+  // Missing: kinships, relationships, properties, assets, liabilities,
+  //          trusts, executors, guardians, wishes, documents,
+  //          nonprobateTransfers, proxyAuthorisations, dealerInterests
+};
+
+// Correct — include all required arrays, even if empty
+const doc = {
+  inherit: "https://openinherit.org/v1/schema.json",
+  version: 1,
+  estate: { /* ... */ },
+  people: [{ /* ... */ }],
+  kinships: [],
+  relationships: [],
+  properties: [],
+  assets: [],
+  liabilities: [],
+  bequests: [{ /* ... */ }],
+  trusts: [],
+  executors: [],
+  guardians: [],
+  wishes: [],
+  documents: [],
+  nonprobateTransfers: [],
+  proxyAuthorisations: [],
+  dealerInterests: [],
+};
+```
+
+**Tip:** the full list of required arrays is: `people`, `kinships`, `relationships`, `properties`, `assets`, `liabilities`, `bequests`, `trusts`, `executors`, `guardians`, `wishes`, `documents`, `nonprobateTransfers`, `proxyAuthorisations`, `dealerInterests`.
+
+---
+
+### 13. `must match format "uuid"`  (non-UUID string)
+
+**What it means:** All `id` fields and cross-reference fields (e.g. `personId`, `testatorPersonId`, `beneficiaryId`) must be valid UUIDs. Sequential integers, slugs, and other string formats are rejected.
+
+**AJV error:** `must match format "uuid"`
+
+**Fix:**
+
+```typescript
+// Wrong — sequential integer as string
+const person = { id: "1", givenName: "James", roles: ["testator"] };
+
+// Wrong — slug/readable identifier
+const person = { id: "james-ashford", givenName: "James", roles: ["testator"] };
+
+// Wrong — missing hyphens
+const person = { id: "a1b2c3d4e5f64a7b8c9d0e1f2a3b4c5d", givenName: "James", roles: ["testator"] };
+
+// Correct — standard UUID v4 format (8-4-4-4-12 hex digits)
+const person = {
+  id: "a1b2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d",
+  givenName: "James",
+  roles: ["testator"],
+};
+
+// Best practice — generate at runtime
+const person = {
+  id: crypto.randomUUID(),
+  givenName: "James",
+  roles: ["testator"],
+};
+```
+
+---
+
+### 14. `must be integer` (monetary amount as decimal)
+
+**What it means:** All monetary amounts in INHERIT are integer minor units — pennies, cents, or the smallest unit of the currency. Decimal values like `50000.00` are rejected because they introduce floating-point rounding risks.
+
+**AJV error:** `must be integer`
+
+**Fix:**
+
+```typescript
+// Wrong — decimal pounds
+const bequest = {
+  id: crypto.randomUUID(),
+  type: "pecuniary",
+  beneficiaryId: "a0000000-0000-0000-0000-000000000003",
+  amount: { amount: 10000.00, currency: "GBP" },  // decimal!
+};
+
+// Wrong — decimal with string
+const bequest = {
+  // ...
+  amount: { amount: "10000.00", currency: "GBP" },  // string, not integer
+};
+
+// Correct — integer minor units (GBP 10,000.00 = 1,000,000 pence)
+const bequest = {
+  id: crypto.randomUUID(),
+  type: "pecuniary",
+  beneficiaryId: "a0000000-0000-0000-0000-000000000003",
+  amount: { amount: 1000000, currency: "GBP" },
+};
+```
+
+**Conversion formula:** multiply the human-readable amount by 100 for currencies with 2 decimal places (GBP, USD, EUR). For zero-decimal currencies (JPY), use the amount directly. For 3-decimal currencies (KWD, BHD), multiply by 1000.
+
+---
+
+### 15. `must be equal to one of the allowed values` (unknown enum value)
+
+**What it means:** A field constrained by an `enum` received a value not in the allowed list. This commonly happens when using values from a different system, misspelling a value, or using a value from an extension without the extension schema loaded.
+
+**AJV error:** `must be equal to one of the allowed values`
+
+**Fix:**
+
+```typescript
+// Wrong — "house" is not a valid propertyType
+const property = {
+  id: crypto.randomUUID(),
+  name: "42 Acacia Avenue",
+  propertyType: "house",  // not in enum
+};
+
+// Wrong — American spelling
+const asset = {
+  id: crypto.randomUUID(),
+  name: "Grandmother's ring",
+  category: "jewelry",  // should be "jewellery" (British English)
+};
+
+// Wrong — value from a different system
+const person = {
+  id: crypto.randomUUID(),
+  givenName: "James",
+  roles: ["owner"],  // "owner" is not a valid INHERIT role
+};
+
+// Correct — check the enum-reference.md for allowed values
+const property = {
+  id: crypto.randomUUID(),
+  name: "42 Acacia Avenue",
+  propertyType: "detached_house",  // valid enum value
+};
+
+const asset = {
+  id: crypto.randomUUID(),
+  name: "Grandmother's ring",
+  category: "jewellery",  // British English spelling
+};
+
+const person = {
+  id: crypto.randomUUID(),
+  givenName: "James",
+  roles: ["testator"],  // valid INHERIT role
+};
+```
+
+**Debugging tip:** check [Enum Reference](./enum-reference.md) for the complete list of allowed values for every enum field. INHERIT uses British English spelling throughout (e.g. `jewellery`, not `jewelry`).
+
+---
+
 ## Additional Resources
 
 - [Comprehensive JSON Schema 2020-12 keyword reference](https://www.learnjsonschema.com/2020-12/) — full documentation for every keyword INHERIT uses

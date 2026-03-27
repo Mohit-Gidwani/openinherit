@@ -7,6 +7,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ## [Unreleased]
 
 ### Added
+- Companion estate design document (`docs/companion-estates.md`) — vocabulary, lifecycle, sync rules, decoupling semantics, malicious deletion protection (#10)
+- `companionLinkStatus`, `linkedAt`, `decoupledAt` fields on `estate.json` — companion link lifecycle tracking (#10)
+- `ownershipCategory` field on `asset.json` — joint/sole/partner-interest classification for companion estates (#10)
+- `sharedWithCompanion` field on `person.json` — marks people shared between companion estates (#10)
+- Canonical field ordering convention (`docs/canonical-ordering.md`) — advisory ordering for entities, root document, and entity arrays (#17)
+- Asset location classes reference (`docs/asset-location-classes.md`) — maps asset categories to physical/financial/digital/intangible with `propertyId` guidance (#11)
+- Enum reference (`docs/enum-reference.md`) — complete catalogue of every enum field across all v1 schemas (#4)
+- Person roles reference (`docs/person-roles.md`) — all 10 roles with descriptions, related entities, and examples (#3)
+- Error guide expansion — 5 new error scenarios: wrong date format, missing entity arrays, invalid UUID, decimal monetary amounts, unknown enum values (#5)
 - Developer examples in `examples/` — 4 TypeScript examples (create-estate, validate-document, import-export, extract-entities) and 1 Python example (validate)
 - 9 global example fixtures covering 7 jurisdictions (GB-ENG, GB-SCT, US-NY, SG, JP, IN-MH, AE) plus an intentionally invalid fixture for testing
 - AI integration guide (`docs/ai-guide.md`) with extraction prompts, tool schemas, and guardrails
