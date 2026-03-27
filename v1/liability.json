@@ -5,7 +5,12 @@
   "description": "A debt or financial obligation. Includes mortgages, loans, credit cards, and cultural obligations (mahr, ketubah debt, lobola) that are priority debts in certain jurisdictions.",
   "type": "object",
   "properties": {
-    "id": { "type": "string", "format": "uuid" },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this liability within the INHERIT document.",
+      "examples": ["f6a7b8c9-d0e1-2345-f012-3456789abcde"]
+    },
     "type": {
       "type": "string",
       "enum": [
@@ -15,34 +20,56 @@
         "tax_liability", "funeral_costs", "care_fees", "mezonot",
         "other"
       ],
-      "$comment": "mahr = Islamic deferred bridal gift (priority debt). ketubah_debt = Jewish marriage contract obligation. lobola = African customary bride price. mezonot = Jewish widow's maintenance obligation."
+      "$comment": "mortgage: secured loan against property. personal_loan: unsecured personal borrowing. credit_card: credit card balance. overdraft: bank overdraft. student_loan: education loan (may be forgiven on death in some jurisdictions). car_finance: vehicle finance agreement. hire_purchase: hire purchase agreement. mahr: Islamic deferred bridal gift — priority debt that must be paid before inheritance distribution. ketubah_debt: Jewish marriage contract obligation — priority debt under halacha. lobola: African customary bride price — may be partially refundable on certain events. tax_liability: income tax, capital gains tax, or other tax owed. funeral_costs: funeral and burial expenses — typically first priority debt. care_fees: care home or nursing fees owed. mezonot: Jewish widow's maintenance obligation — paid from the estate before distribution. other: any liability not covered above.",
+      "description": "The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems.",
+      "examples": ["mortgage", "credit_card", "mahr", "funeral_costs"]
     },
     "creditor": {
       "type": "string",
-      "description": "Name of the creditor or institution"
+      "description": "Name of the creditor, institution, or person to whom the debt is owed.",
+      "examples": ["Barclays Bank", "HMRC", "Manchester City Council", "Fatimah bint Hassan"]
     },
     "amount": {
       "$ref": "common/money.json",
-      "description": "Outstanding balance"
+      "description": "Outstanding balance of this liability in minor currency units."
     },
     "securedAgainst": {
       "type": "string",
       "format": "uuid",
-      "description": "Reference to a Property.id or Asset.id this liability is secured against"
+      "description": "Reference to a Property.id or Asset.id that this liability is secured against. Unsecured debts should omit this field."
     },
-    "monthlyPayment": { "$ref": "common/money.json" },
+    "monthlyPayment": {
+      "$ref": "common/money.json",
+      "description": "Regular monthly payment amount in minor currency units, if applicable."
+    },
     "interestRate": {
       "type": "number",
       "minimum": 0,
-      "description": "Annual interest rate as percentage (e.g. 4.5 = 4.5%)"
+      "description": "Annual interest rate as a percentage (e.g. 4.5 means 4.5% per annum). Zero for interest-free debts.",
+      "examples": [4.5, 19.9, 0, 6.1]
     },
-    "startDate": { "type": "string", "format": "date" },
-    "endDate": { "type": "string", "format": "date" },
+    "startDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the liability was incurred or the agreement began.",
+      "examples": ["2020-06-01", "2018-11-15"]
+    },
+    "endDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the liability is expected to be repaid in full, if known.",
+      "examples": ["2045-06-01", "2028-11-15"]
+    },
     "accountReference": {
       "type": "string",
-      "description": "Account or reference number"
+      "description": "Account number, reference number, or policy number for this liability.",
+      "examples": ["MORT-2020-123456", "4532-XXXX-XXXX-7890", "SL/2018/001234"]
     },
-    "notes": { "type": "string" }
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes about this liability. Use for payment protection insurance, disputes, or special arrangements.",
+      "examples": ["PPI may apply — check with Barclays", "Student loan written off on death under UK rules", "Deferred mahr — becomes payable on death or divorce"]
+    }
   },
   "required": ["id", "type", "amount"],
   "patternProperties": {

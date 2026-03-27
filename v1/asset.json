@@ -7,17 +7,37 @@
   "$defs": {
     "Photo": {
       "type": "object",
+      "description": "A photograph of the asset, useful for identification during probate and for insurance claims.",
       "properties": {
-        "url": { "type": "string", "format": "uri" },
-        "caption": { "type": "string" }
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URI pointing to the photo. May be an S3 URI, HTTPS URL, or other storage reference.",
+          "examples": ["https://storage.example.com/photos/ring-001.jpg", "s3://estate-docs/assets/painting.jpg"]
+        },
+        "caption": {
+          "type": "string",
+          "description": "Descriptive caption for the photograph.",
+          "examples": ["Front view of the engagement ring", "Oil painting, signed lower right"]
+        }
       },
       "required": ["url"],
       "additionalProperties": false
     }
   },
   "properties": {
-    "id": { "type": "string", "format": "uuid" },
-    "name": { "type": "string", "minLength": 1, "description": "Display name for this asset" },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this asset within the INHERIT document.",
+      "examples": ["e5f6a7b8-c9d0-1234-ef01-23456789abcd"]
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Display name for this asset. Should be specific enough to identify the item during probate.",
+      "examples": ["Grandmother's engagement ring", "Barclays Current Account", "2019 Toyota Corolla", "Bitcoin wallet", "Stradivarius violin"]
+    },
     "category": {
       "type": "string",
       "enum": [
@@ -31,68 +51,129 @@
         "sukuk", "takaful", "islamic_deposit",
         "other"
       ],
-      "$comment": "sukuk = Islamic bond. takaful = Islamic insurance. islamic_deposit = Shariah-compliant deposit."
+      "$comment": "bank_account: current or checking account. savings_account: deposit or savings account. investment: stocks, bonds, funds, ISAs. pension: occupational or personal pension. shares: individual company shares. premium_bonds: UK NS&I Premium Bonds. cryptocurrency: Bitcoin, Ethereum, etc. insurance: life insurance or endowment. vehicle: car, motorcycle, boat, etc. jewellery: rings, necklaces, watches. art: paintings, sculptures, prints. antiques: items of historical value. collectibles: stamps, coins, memorabilia. furniture: household furniture. electronics: computers, phones, cameras. musical_instruments: pianos, guitars, etc. books: valuable or collectible books. clothing: valuable clothing items. kitchenware: valuable kitchen items. sports_equipment: golf clubs, etc. firearms: shotguns, rifles (require licensing). wine_and_spirits: wine collections, rare spirits. tools: workshop tools and equipment. garden_and_outdoor: garden machinery, outdoor equipment. business_interest: share in a business or partnership. intellectual_property: patents, copyrights, trademarks. domain_name: internet domain names. social_media_account: accounts with commercial value. digital_subscription: transferable digital subscriptions. sukuk: Islamic bond. takaful: Islamic insurance. islamic_deposit: Shariah-compliant deposit account. other: any asset not covered above.",
+      "description": "The broad category of this asset. Determines which additional details may be relevant.",
+      "examples": ["bank_account", "jewellery", "vehicle", "cryptocurrency"]
     },
-    "subcategory": { "type": "string" },
-    "estimatedValue": { "$ref": "common/money.json" },
-    "professionalValuation": { "$ref": "common/money.json" },
-    "valuationDate": { "type": "string", "format": "date" },
+    "subcategory": {
+      "type": "string",
+      "description": "More specific classification within the category. Free text to accommodate jurisdiction-specific asset types.",
+      "examples": ["engagement ring", "ISA", "self-invested personal pension", "NFT", "vintage wine"]
+    },
+    "estimatedValue": {
+      "$ref": "common/money.json",
+      "description": "Owner's estimate of the asset's current value, in minor currency units."
+    },
+    "professionalValuation": {
+      "$ref": "common/money.json",
+      "description": "Professional valuation of the asset, in minor currency units."
+    },
+    "valuationDate": {
+      "type": "string",
+      "format": "date",
+      "description": "Date of the most recent valuation.",
+      "examples": ["2024-11-01", "2025-02-14"]
+    },
     "valuationConfidence": {
       "type": "string",
-      "enum": ["estimated", "professional", "probate", "unknown"]
+      "enum": ["estimated", "professional", "probate", "unknown"],
+      "$comment": "estimated: owner's own estimate. professional: assessed by a qualified valuer. probate: valuation agreed with tax authority for probate. unknown: basis of valuation is unknown.",
+      "description": "Level of confidence in the stated valuation.",
+      "examples": ["estimated", "professional"]
     },
     "condition": {
       "type": "string",
       "enum": ["excellent", "good", "fair", "poor", "unknown", "not_applicable"],
-      "$comment": "Use 'not_applicable' for financial assets."
+      "$comment": "excellent: like new or pristine. good: normal wear, fully functional. fair: showing age, may need minor repair. poor: significant wear, may need major repair. unknown: condition has not been assessed. not_applicable: condition is not relevant (e.g. bank accounts, pensions).",
+      "description": "Physical condition of the asset. Use 'not_applicable' for financial assets where condition is meaningless.",
+      "examples": ["good", "not_applicable"]
     },
-    "quantity": { "type": "integer", "minimum": 1 },
-    "location": { "type": "string", "description": "Where this asset is stored or held" },
+    "quantity": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Number of items if this represents multiple identical or similar items.",
+      "examples": [1, 12, 500]
+    },
+    "location": {
+      "type": "string",
+      "description": "Where this asset is physically stored or held — a bank, safe, property, or institution.",
+      "examples": ["Barclays Bank, Manchester branch", "Home safe", "Bonhams storage, London", "Coinbase exchange"]
+    },
     "propertyId": {
       "type": "string",
       "format": "uuid",
-      "description": "Reference to a Property.id if located at a property"
+      "description": "Reference to a Property.id if this asset is located at a specific property in the estate."
     },
     "identifiers": {
       "type": "array",
       "items": { "$ref": "common/identifier.json" },
-      "description": "Serial numbers, account numbers, policy refs, etc."
+      "description": "External identifiers — serial numbers, account numbers, policy references, registration numbers, etc.",
+      "examples": [
+        [{"system": "urn:barclays:sort-code-account", "value": "20-45-67 12345678", "type": "bank_account"}],
+        [{"value": "DVLA: AB12 CDE", "type": "vehicle_registration"}]
+      ]
     },
     "photos": {
       "type": "array",
-      "items": { "$ref": "#/$defs/Photo" }
+      "items": { "$ref": "#/$defs/Photo" },
+      "description": "Photographs of this asset for identification and valuation purposes."
     },
     "possessionStatus": {
       "type": "string",
       "enum": ["possessed_at_death", "receivable", "contingent"],
-      "$comment": "Distinguishes assets held at death from those receivable after (insurance payouts, debts owed). Under halacha, the bekhor's double portion applies only to 'possessed_at_death' (muchzak), not 'receivable' (ra'ui). Useful for probate valuations universally."
+      "$comment": "possessed_at_death: asset was in the deceased's possession or control at death (muchzak in halacha). receivable: asset is owed to the estate but not yet received — e.g. insurance payouts, debts owed to the deceased (ra'ui in halacha). contingent: asset depends on a future event that may or may not occur. Under halacha, the bekhor's double portion applies only to 'possessed_at_death' (muchzak), not 'receivable' (ra'ui). Useful for probate valuations universally.",
+      "description": "Whether the asset was held at death, is receivable post-death, or is contingent on a future event.",
+      "examples": ["possessed_at_death", "receivable"]
     },
     "mobilityType": {
       "type": "string",
       "enum": ["immoveable", "moveable", "mixed"],
-      "$comment": "Relevant for Shia inheritance and French lex rei sitae."
+      "$comment": "immoveable: land or buildings (rare for assets — typically use Property). moveable: personal property, financial assets, vehicles. mixed: combination. Relevant for Shia inheritance and French lex rei sitae.",
+      "description": "Whether this asset is classified as immoveable or moveable property. Affects which conflict-of-laws rules apply in cross-border estates.",
+      "examples": ["moveable"]
     },
     "acquisitionType": {
       "type": "string",
       "enum": [
         "self_acquired", "ancestral_joint", "ancestral_severed",
         "inherited", "gifted", "stridhan", "communal", "waqf_endowed"
-      ]
+      ],
+      "$comment": "self_acquired: purchased or earned by the owner. ancestral_joint: undivided coparcenary property. ancestral_severed: partitioned former joint property. inherited: received through inheritance. gifted: received as a gift. stridhan: Hindu woman's absolute property. communal: communal or clan property. waqf_endowed: Islamic endowment.",
+      "description": "How this asset was acquired. Determines succession rules in Indian and other customary systems.",
+      "examples": ["self_acquired", "inherited"]
     },
     "registrationStatus": {
       "type": "string",
-      "enum": ["formally_registered", "informally_held", "community_acknowledged", "disputed", "undocumented"]
+      "enum": ["formally_registered", "informally_held", "community_acknowledged", "disputed", "undocumented"],
+      "$comment": "formally_registered: documented with an official authority. informally_held: possessed but not registered. community_acknowledged: community recognises ownership. disputed: ownership is contested. undocumented: no documentation exists.",
+      "description": "Whether ownership of this asset is formally registered or documented.",
+      "examples": ["formally_registered"]
     },
     "ownershipEvidence": {
       "type": "string",
-      "enum": ["title_deed", "certificate_of_occupancy", "family_recognition", "community_testimony", "receipts_only", "none"]
+      "enum": ["title_deed", "certificate_of_occupancy", "family_recognition", "community_testimony", "receipts_only", "none"],
+      "$comment": "title_deed: formal ownership document. certificate_of_occupancy: Nigerian occupancy certificate. family_recognition: family acknowledges ownership. community_testimony: community can attest. receipts_only: purchase receipts only. none: no evidence available.",
+      "description": "The type of evidence available to prove ownership of this asset.",
+      "examples": ["receipts_only", "title_deed"]
     },
     "applicableSuccessionLaw": {
       "type": "object",
+      "description": "The succession law governing this specific asset, if different from the general estate law.",
       "properties": {
-        "jurisdiction": { "$ref": "common/jurisdiction.json" },
-        "lawName": { "type": "string" },
-        "section": { "type": "string" }
+        "jurisdiction": {
+          "$ref": "common/jurisdiction.json",
+          "description": "Jurisdiction whose succession law governs this asset."
+        },
+        "lawName": {
+          "type": "string",
+          "description": "Name of the applicable law.",
+          "examples": ["Hindu Succession Act 1956", "Japanese Civil Code"]
+        },
+        "section": {
+          "type": "string",
+          "description": "Specific section of the law.",
+          "examples": ["s.6", "Art. 896"]
+        }
       },
       "required": ["jurisdiction"],
       "additionalProperties": false
@@ -100,50 +181,75 @@
     "beneficiaryDesignation": {
       "type": "object",
       "$comment": "For assets with named beneficiaries (retirement accounts, life insurance, POD bank accounts). These pass OUTSIDE the estate.",
+      "description": "Named beneficiary designation for this asset. Assets with beneficiary designations pass outside the probate estate — the will does not control their distribution.",
       "properties": {
-        "primaryBeneficiaryPersonIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
-        "contingentBeneficiaryPersonIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+        "primaryBeneficiaryPersonIds": {
+          "type": "array",
+          "items": { "type": "string", "format": "uuid" },
+          "description": "Person IDs of the primary beneficiaries."
+        },
+        "contingentBeneficiaryPersonIds": {
+          "type": "array",
+          "items": { "type": "string", "format": "uuid" },
+          "description": "Person IDs of contingent beneficiaries (receive if primary beneficiaries predecease)."
+        },
         "designationType": {
           "type": "string",
-          "enum": ["retirement_account", "life_insurance", "superannuation", "pod_account", "other"]
+          "enum": ["retirement_account", "life_insurance", "superannuation", "pod_account", "other"],
+          "$comment": "retirement_account: 401(k), IRA, SIPP, etc. life_insurance: life insurance policy. superannuation: Australian superannuation fund. pod_account: payable-on-death bank account. other: any other type of beneficiary designation.",
+          "description": "The type of beneficiary designation.",
+          "examples": ["life_insurance", "retirement_account"]
         },
-        "linkedNonprobateTransferId": { "type": "string", "format": "uuid" }
+        "linkedNonprobateTransferId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Reference to the NonprobateTransfer entity that tracks this designation."
+        }
       },
       "additionalProperties": false
     },
     "digitalAccessConsent": {
       "type": "object",
       "$comment": "RUFADAA (Revised Uniform Fiduciary Access to Digital Assets Act) — adopted by ~47 US states. Controls whether fiduciaries can access digital assets.",
+      "description": "Digital access consent under RUFADAA or equivalent legislation. Governs whether executors and fiduciaries can access the deceased's digital accounts and assets.",
       "properties": {
-        "consentGiven": { "type": "boolean" },
-        "scope": { "type": "string", "enum": ["full_access", "limited_access", "no_access"] },
-        "designatedRecipientPersonId": { "type": "string", "format": "uuid" },
+        "consentGiven": {
+          "type": "boolean",
+          "description": "Whether the account holder has given consent for fiduciary access.",
+          "examples": [true]
+        },
+        "scope": {
+          "type": "string",
+          "enum": ["full_access", "limited_access", "no_access"],
+          "$comment": "full_access: fiduciary may access all content and account data. limited_access: fiduciary may access only specified data (e.g. financial records but not personal messages). no_access: fiduciary may not access any content.",
+          "description": "The scope of access granted to fiduciaries.",
+          "examples": ["full_access", "limited_access"]
+        },
+        "designatedRecipientPersonId": {
+          "type": "string",
+          "format": "uuid",
+          "description": "Reference to the Person.id designated to receive access to this digital asset."
+        },
         "onlineToolDirective": {
           "type": "boolean",
-          "$comment": "Whether the user set access directives via the platform's own tool (takes priority under RUFADAA)."
+          "$comment": "Whether the user set access directives via the platform's own tool (takes priority under RUFADAA).",
+          "description": "Whether the user set access directives through the platform's own tool (e.g. Google Inactive Account Manager, Facebook Legacy Contact). Platform directives take priority under RUFADAA.",
+          "examples": [true, false]
         }
       },
       "additionalProperties": false
     },
-    "collectionId": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Links this asset to an asset collection",
-      "examples": ["b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8"]
-    },
-    "ownershipCategory": {
-      "type": "string",
-      "enum": ["joint", "sole_partner_interest", "sole_no_partner_interest", "sole"],
-      "default": "sole",
-      "description": "How this asset relates to a companion estate. Determines sync behaviour and visibility between linked estates.",
-      "$comment": "joint = both partners own it. sole_partner_interest = one partner owns it, the other can see it (read-only). sole_no_partner_interest = one partner owns it privately. sole = default for non-coupled estates. See docs/companion-estates.md.",
-      "examples": ["joint", "sole_partner_interest", "sole"]
-    },
     "passesOutsideEstate": {
       "type": "boolean",
-      "$comment": "True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will."
+      "$comment": "True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will.",
+      "description": "Whether this asset passes outside the probate estate. Beneficiary designations, POD accounts, and jointly held assets typically bypass the will.",
+      "examples": [true, false]
     },
-    "notes": { "type": "string" }
+    "notes": {
+      "type": "string",
+      "description": "Free-text notes about this asset. Use for provenance, sentimental value, special handling instructions, or anything not captured by structured fields.",
+      "examples": ["Belonged to great-grandmother — significant sentimental value to the family", "Firearm requires Section 1 certificate — must be surrendered or transferred to a licence holder within 7 days of death"]
+    }
   },
   "required": ["id", "name", "category"],
   "patternProperties": {
