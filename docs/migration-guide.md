@@ -69,7 +69,7 @@ Map each asset and property to its INHERIT entity. Convert monetary values to in
 
 ### Step 3: Build bequests, executors, guardians, and trusts
 
-These entities reference people (and sometimes assets/properties) by UUID. Use the lookup from Step 1 to populate `beneficiaryId`, `personId`, `guardianPersonId`, etc.
+These entities reference people (and sometimes assets/properties) by UUID. Use the lookup from Step 1 to populate `beneficiaryId`, `personId`, etc.
 
 ### Step 4: Assemble the document
 

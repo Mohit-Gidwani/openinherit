@@ -2220,7 +2220,7 @@ components:
           description: Unique identifier for this kinship bond within the INHERIT document.
           examples:
             - a3b4c5d6-e7f8-9012-a345-6789abcdef01
-        type:
+        kinshipType:
           type: string
           enum:
             - PARENT_CHILD_BIOLOGICAL
@@ -2293,7 +2293,7 @@ components:
             - Child acknowledged by father under Islamic law — inheritance rights confirmed
       required:
         - id
-        - type
+        - kinshipType
         - fromPersonId
         - toPersonId
       patternProperties:
@@ -3797,7 +3797,7 @@ components:
           description: Unique identifier for this liability within the INHERIT document.
           examples:
             - f6a7b8c9-d0e1-2345-f012-3456789abcde
-        type:
+        liabilityType:
           type: string
           enum:
             - mortgage
@@ -3879,7 +3879,7 @@ components:
             - Deferred mahr — becomes payable on death or divorce
       required:
         - id
-        - type
+        - liabilityType
         - amount
       patternProperties:
         ^x-inherit-: {}
@@ -4232,7 +4232,7 @@ components:
           description: Unique identifier for this bequest within the INHERIT document.
           examples:
             - a7b8c9d0-e1f2-3456-a789-0123456789ab
-        type:
+        bequestType:
           type: string
           enum:
             - specific
@@ -4381,12 +4381,12 @@ components:
             - If the charity has merged or changed name, the executor should identify the successor organisation
       required:
         - id
-        - type
+        - bequestType
       allOf:
         - $comment: Core types (specific, pecuniary, demonstrative, general, residuary) require beneficiaryId OR beneficiaryOrganisation. When extensionType is set, extension schema handles validation.
           if:
             properties:
-              type:
+              bequestType:
                 enum:
                   - specific
                   - pecuniary
@@ -4394,7 +4394,7 @@ components:
                   - general
                   - residuary
             required:
-              - type
+              - bequestType
             not:
               required:
                 - extensionType
@@ -4407,20 +4407,20 @@ components:
         - $comment: Class bequests require classDefinition.
           if:
             properties:
-              type:
+              bequestType:
                 const: class
             required:
-              - type
+              - bequestType
           then:
             required:
               - classDefinition
         - $comment: Life interest bequests require lifeInterest object.
           if:
             properties:
-              type:
+              bequestType:
                 const: life_interest
             required:
-              - type
+              - bequestType
           then:
             required:
               - lifeInterest
@@ -4552,7 +4552,7 @@ components:
             - The Davies Family Trust
             - NRB Discretionary Trust
             - Al-Rahman Waqf
-        type:
+        trustType:
           type: string
           enum:
             - discretionary
@@ -4847,7 +4847,7 @@ components:
       required:
         - id
         - name
-        - type
+        - trustType
         - trustees
         - beneficiaries
       patternProperties:
@@ -4954,7 +4954,7 @@ components:
           description: Unique identifier for this guardian appointment within the INHERIT document.
           examples:
             - d0e1f2a3-b4c5-6789-d012-3456789abcde
-        guardianPersonId:
+        personId:
           type: string
           format: uuid
           description: Reference to the Person.id of the guardian being appointed.
@@ -5019,7 +5019,7 @@ components:
             - Both parents wish the child to be raised in the Islamic faith
       required:
         - id
-        - guardianPersonId
+        - personId
         - childPersonId
         - role
         - appointmentType
@@ -5039,7 +5039,7 @@ components:
           description: Unique identifier for this wish within the INHERIT document.
           examples:
             - e1f2a3b4-c5d6-7890-e123-456789abcdef
-        type:
+        wishType:
           type: string
           enum:
             - funeral
@@ -5097,7 +5097,7 @@ components:
             - Updated after acquiring second dog in 2024
       required:
         - id
-        - type
+        - wishType
         - title
       patternProperties:
         ^x-inherit-: {}
@@ -5221,7 +5221,7 @@ components:
           description: Unique identifier for this nonprobate transfer within the INHERIT document.
           examples:
             - c5d6e7f8-a9b0-1234-c567-89abcdef0123
-        type:
+        transferType:
           type: string
           enum:
             - revocable_trust
@@ -5320,7 +5320,7 @@ components:
             - TOD deed recorded in Los Angeles County
       required:
         - id
-        - type
+        - transferType
         - passesOutsideEstate
       patternProperties:
         ^x-inherit-: {}

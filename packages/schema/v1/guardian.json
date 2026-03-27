@@ -5,8 +5,11 @@
   "description": "A guardian appointment for a minor child. Supports testamentary, court-appointed, shariah court, community-appointed, and religious court appointments. Guardianship structures include individual, collective, rotating, and family council determined.",
   "type": "object",
   "properties": {
-    "id": { "type": "string", "format": "uuid" },
-    "guardianPersonId": {
+    "id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "personId": {
       "type": "string",
       "format": "uuid",
       "description": "Reference to the guardian Person.id"
@@ -18,7 +21,11 @@
     },
     "role": {
       "type": "string",
-      "enum": ["primary", "secondary", "substitute"]
+      "enum": [
+        "primary",
+        "secondary",
+        "substitute"
+      ]
     },
     "appointmentType": {
       "type": "string",
@@ -33,16 +40,31 @@
     },
     "guardianshipStructure": {
       "type": "string",
-      "enum": ["individual", "collective", "rotating", "family_council_determined"]
+      "enum": [
+        "individual",
+        "collective",
+        "rotating",
+        "family_council_determined"
+      ]
     },
     "familyCouncilDecisionRef": {
       "type": "string",
       "$comment": "Reference to a family council decision document or record."
     },
-    "conditions": { "type": "string" },
-    "notes": { "type": "string" }
+    "conditions": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    }
   },
-  "required": ["id", "guardianPersonId", "childPersonId", "role", "appointmentType"],
+  "required": [
+    "id",
+    "personId",
+    "childPersonId",
+    "role",
+    "appointmentType"
+  ],
   "patternProperties": {
     "^x-inherit-": {}
   },

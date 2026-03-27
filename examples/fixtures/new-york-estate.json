@@ -69,7 +69,7 @@
   "kinships": [
     {
       "id": "c1000004-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000004-0000-4000-a000-000000000001",
       "toPersonId": "a1000004-0000-4000-a000-000000000003"
     }
@@ -142,7 +142,7 @@
   "bequests": [
     {
       "id": "b1000004-0000-4000-a000-000000000001",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000004-0000-4000-a000-000000000002",
       "description": "I give the residue of my probate estate to the trustee of the Chen Family Revocable Trust."
     }
@@ -151,7 +151,7 @@
     {
       "id": "71000004-0000-4000-a000-000000000001",
       "name": "Chen Family Revocable Trust",
-      "type": "discretionary",
+      "trustType": "discretionary",
       "creationType": "inter_vivos_revocable",
       "revocability": "revocable",
       "settlor": "a1000004-0000-4000-a000-000000000001",
@@ -186,7 +186,7 @@
   "nonprobateTransfers": [
     {
       "id": "a2000004-0000-4000-a000-000000000001",
-      "type": "revocable_trust",
+      "transferType": "revocable_trust",
       "passesOutsideEstate": true,
       "trustId": "71000004-0000-4000-a000-000000000001",
       "description": "Assets held in the Chen Family Revocable Trust pass outside probate.",
@@ -197,7 +197,7 @@
     },
     {
       "id": "a2000004-0000-4000-a000-000000000002",
-      "type": "beneficiary_designation",
+      "transferType": "beneficiary_designation",
       "passesOutsideEstate": true,
       "assetIds": [
         "51000004-0000-4000-a000-000000000001"

@@ -1445,7 +1445,7 @@ export type Kinship2 = {
     /**
      * The type of familial bond. The distinction between paternal and maternal half-siblings is critical for Islamic and some customary inheritance systems.
      */
-    type: 'PARENT_CHILD_BIOLOGICAL' | 'PARENT_CHILD_ADOPTED' | 'PARENT_CHILD_STEP' | 'PARENT_CHILD_FOSTER' | 'PARENT_CHILD_ACKNOWLEDGED' | 'SIBLING' | 'HALF_SIBLING_PATERNAL' | 'HALF_SIBLING_MATERNAL' | 'STEP_SIBLING' | 'GRANDPARENT_GRANDCHILD' | 'UNCLE_NEPHEW' | 'AUNT_NEPHEW';
+    kinshipType: 'PARENT_CHILD_BIOLOGICAL' | 'PARENT_CHILD_ADOPTED' | 'PARENT_CHILD_STEP' | 'PARENT_CHILD_FOSTER' | 'PARENT_CHILD_ACKNOWLEDGED' | 'SIBLING' | 'HALF_SIBLING_PATERNAL' | 'HALF_SIBLING_MATERNAL' | 'STEP_SIBLING' | 'GRANDPARENT_GRANDCHILD' | 'UNCLE_NEPHEW' | 'AUNT_NEPHEW';
     /**
      * The parent, elder, or senior person in this kinship bond (Person.id). For parent-child types, this is always the parent.
      */
@@ -2218,7 +2218,7 @@ export type Liability2 = {
     /**
      * The category of liability. Cultural and religious obligations are included because they are priority debts in their respective legal systems.
      */
-    type: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
+    liabilityType: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
     /**
      * Name of the creditor, institution, or person to whom the debt is owed.
      */
@@ -2389,7 +2389,7 @@ export type Bequest2 = unknown & {
     /**
      * The category of bequest.
      */
-    type: 'specific' | 'pecuniary' | 'demonstrative' | 'general' | 'residuary' | 'life_interest' | 'class';
+    bequestType: 'specific' | 'pecuniary' | 'demonstrative' | 'general' | 'residuary' | 'life_interest' | 'class';
     /**
      * Extension-specific bequest type not covered by the core enum. Validated by the relevant extension schema.
      */
@@ -2522,7 +2522,7 @@ export type Trust2 = {
     /**
      * The category of trust.
      */
-    type: 'discretionary' | 'life_interest' | 'bare' | 'accumulation_and_maintenance' | 'disabled_persons' | 'charitable' | 'nil_rate_band' | 'waqf' | 'other';
+    trustType: 'discretionary' | 'life_interest' | 'bare' | 'accumulation_and_maintenance' | 'disabled_persons' | 'charitable' | 'nil_rate_band' | 'waqf' | 'other';
     /**
      * Persons appointed as trustees, protectors, or enforcers of this trust.
      */
@@ -2830,7 +2830,7 @@ export type Guardian2 = {
     /**
      * Reference to the Person.id of the guardian being appointed.
      */
-    guardianPersonId: string;
+    personId: string;
     /**
      * Reference to the Person.id of the child this guardian is appointed for.
      */
@@ -2875,7 +2875,7 @@ export type Wish2 = {
     /**
      * The category of wish. Wishes may be non-binding in law but culturally or religiously obligatory.
      */
-    type: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general';
+    wishType: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general';
     /**
      * A short descriptive title for this wish.
      */
@@ -2973,7 +2973,7 @@ export type NonprobateTransfer2 = {
     /**
      * The mechanism by which this asset passes outside the probate estate.
      */
-    type: 'revocable_trust' | 'tod_deed' | 'pod_account' | 'jtwros' | 'tenancy_by_entirety' | 'beneficiary_designation' | 'life_insurance_nomination' | 'superannuation_nomination' | 'cpf_nomination' | 'epf_nomination' | 'mandatory_savings_nomination';
+    transferType: 'revocable_trust' | 'tod_deed' | 'pod_account' | 'jtwros' | 'tenancy_by_entirety' | 'beneficiary_designation' | 'life_insurance_nomination' | 'superannuation_nomination' | 'cpf_nomination' | 'epf_nomination' | 'mandatory_savings_nomination';
     /**
      * More specific description of the transfer mechanism.
      */

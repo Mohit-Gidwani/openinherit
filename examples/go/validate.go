@@ -61,7 +61,7 @@ type Executor struct {
 // Guardian references both a guardian person and a child person.
 type Guardian struct {
 	ID               string `json:"id"`
-	GuardianPersonID string `json:"guardianPersonId"`
+	PersonID         string `json:"personId"`
 	ChildPersonID    string `json:"childPersonId"`
 }
 
@@ -244,12 +244,12 @@ func runLevel2(documentPath string) (bool, []RefError) {
 		}
 	}
 
-	// guardian.guardianPersonId and guardian.childPersonId must reference people
+	// guardian.personId and guardian.childPersonId must reference people
 	for i, g := range doc.Guardians {
-		if !personIDs[g.GuardianPersonID] {
+		if !personIDs[g.PersonID] {
 			errors = append(errors, RefError{
-				Path:        fmt.Sprintf("/guardians/%d/guardianPersonId", i),
-				Message:     fmt.Sprintf("Person %q not found in people array.", g.GuardianPersonID),
+				Path:        fmt.Sprintf("/guardians/%d/personId", i),
+				Message:     fmt.Sprintf("Person %q not found in people array.", g.PersonID),
 				Explanation: fmt.Sprintf("Guardian %q references a guardian person that does not exist in the people array.", g.ID),
 			})
 		}

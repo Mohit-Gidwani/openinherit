@@ -238,7 +238,7 @@ Level 2 errors occur when cross-references within the document point to entities
 - `estate.testatorPersonId`
 - `bequest.beneficiaryId`
 - `executor.personId`
-- `guardian.guardianPersonId`
+- `guardian.personId`
 - `guardian.childPersonId`
 - Witness person IDs in attestations
 

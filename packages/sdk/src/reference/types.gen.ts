@@ -772,7 +772,7 @@ export type Relationship = {
  */
 export type Kinship = {
     id: string;
-    type: 'PARENT_CHILD_BIOLOGICAL' | 'PARENT_CHILD_ADOPTED' | 'PARENT_CHILD_STEP' | 'PARENT_CHILD_FOSTER' | 'PARENT_CHILD_ACKNOWLEDGED' | 'SIBLING' | 'HALF_SIBLING_PATERNAL' | 'HALF_SIBLING_MATERNAL' | 'STEP_SIBLING' | 'GRANDPARENT_GRANDCHILD' | 'UNCLE_NEPHEW' | 'AUNT_NEPHEW';
+    kinshipType: 'PARENT_CHILD_BIOLOGICAL' | 'PARENT_CHILD_ADOPTED' | 'PARENT_CHILD_STEP' | 'PARENT_CHILD_FOSTER' | 'PARENT_CHILD_ACKNOWLEDGED' | 'SIBLING' | 'HALF_SIBLING_PATERNAL' | 'HALF_SIBLING_MATERNAL' | 'STEP_SIBLING' | 'GRANDPARENT_GRANDCHILD' | 'UNCLE_NEPHEW' | 'AUNT_NEPHEW';
     /**
      * Parent/elder person in the kinship (Person.id)
      */
@@ -950,7 +950,7 @@ export type Asset = {
  */
 export type Liability = {
     id: string;
-    type: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
+    liabilityType: 'mortgage' | 'personal_loan' | 'credit_card' | 'overdraft' | 'student_loan' | 'car_finance' | 'hire_purchase' | 'mahr' | 'ketubah_debt' | 'lobola' | 'tax_liability' | 'funeral_costs' | 'care_fees' | 'mezonot' | 'other';
     /**
      * Name of the creditor or institution
      */
@@ -1022,7 +1022,7 @@ export type InheritanceResponse = {
  */
 export type Bequest = unknown & {
     id: string;
-    type: 'specific' | 'pecuniary' | 'demonstrative' | 'general' | 'residuary' | 'life_interest' | 'class';
+    bequestType: 'specific' | 'pecuniary' | 'demonstrative' | 'general' | 'residuary' | 'life_interest' | 'class';
     extensionType?: string;
     beneficiaryId?: string;
     beneficiaryOrganisation?: BeneficiaryOrganisation;
@@ -1065,7 +1065,7 @@ export type TrustBeneficiary = {
 export type Trust = {
     id: string;
     name: string;
-    type: 'discretionary' | 'life_interest' | 'bare' | 'accumulation_and_maintenance' | 'disabled_persons' | 'charitable' | 'nil_rate_band' | 'waqf' | 'other';
+    trustType: 'discretionary' | 'life_interest' | 'bare' | 'accumulation_and_maintenance' | 'disabled_persons' | 'charitable' | 'nil_rate_band' | 'waqf' | 'other';
     trustees: Array<TrustAppointee>;
     beneficiaries: Array<TrustBeneficiary>;
     settlor?: string;
@@ -1172,7 +1172,7 @@ export type Guardian = {
     /**
      * Reference to the guardian Person.id
      */
-    guardianPersonId: string;
+    personId: string;
     /**
      * Reference to the child Person.id
      */
@@ -1193,7 +1193,7 @@ export type Guardian = {
  */
 export type Wish = {
     id: string;
-    type: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general';
+    wishType: 'funeral' | 'letter' | 'care' | 'distribution' | 'digital' | 'pets' | 'general';
     title: string;
     content?: string;
     bindingNature?: 'non_binding' | 'culturally_obligatory' | 'religiously_obligatory' | 'legally_binding';
@@ -1237,7 +1237,7 @@ export type Document = {
  */
 export type NonprobateTransfer = {
     id: string;
-    type: 'revocable_trust' | 'tod_deed' | 'pod_account' | 'jtwros' | 'tenancy_by_entirety' | 'beneficiary_designation' | 'life_insurance_nomination' | 'superannuation_nomination' | 'cpf_nomination' | 'epf_nomination' | 'mandatory_savings_nomination';
+    transferType: 'revocable_trust' | 'tod_deed' | 'pod_account' | 'jtwros' | 'tenancy_by_entirety' | 'beneficiary_designation' | 'life_insurance_nomination' | 'superannuation_nomination' | 'cpf_nomination' | 'epf_nomination' | 'mandatory_savings_nomination';
     designationType?: string;
     description?: string;
     trustId?: string;

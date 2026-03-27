@@ -80,13 +80,13 @@
   "kinships": [
     {
       "id": "c1000002-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000002-0000-4000-a000-000000000001",
       "toPersonId": "a1000002-0000-4000-a000-000000000003"
     },
     {
       "id": "c1000002-0000-4000-a000-000000000002",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000002-0000-4000-a000-000000000001",
       "toPersonId": "a1000002-0000-4000-a000-000000000004"
     }
@@ -148,13 +148,13 @@
   "bequests": [
     {
       "id": "b1000002-0000-4000-a000-000000000001",
-      "type": "specific",
+      "bequestType": "specific",
       "beneficiaryId": "a1000002-0000-4000-a000-000000000002",
       "description": "I give my property at 42 Acacia Avenue, Bristol to my wife Catherine Ashford absolutely."
     },
     {
       "id": "b1000002-0000-4000-a000-000000000002",
-      "type": "pecuniary",
+      "bequestType": "pecuniary",
       "beneficiaryId": "a1000002-0000-4000-a000-000000000003",
       "amount": {
         "amount": 1000000,
@@ -164,7 +164,7 @@
     },
     {
       "id": "b1000002-0000-4000-a000-000000000003",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000002-0000-4000-a000-000000000002",
       "description": "I give the residue of my estate to my wife Catherine Ashford."
     }
@@ -180,7 +180,7 @@
   "guardians": [
     {
       "id": "91000002-0000-4000-a000-000000000001",
-      "guardianPersonId": "a1000002-0000-4000-a000-000000000005",
+      "personId": "a1000002-0000-4000-a000-000000000005",
       "childPersonId": "a1000002-0000-4000-a000-000000000004",
       "role": "primary",
       "appointmentType": "testamentary"

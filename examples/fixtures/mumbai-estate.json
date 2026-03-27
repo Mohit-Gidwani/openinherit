@@ -63,7 +63,7 @@
   "kinships": [
     {
       "id": "c1000007-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000007-0000-4000-a000-000000000001",
       "toPersonId": "a1000007-0000-4000-a000-000000000003"
     }
@@ -149,7 +149,7 @@
   "bequests": [
     {
       "id": "b1000007-0000-4000-a000-000000000001",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000007-0000-4000-a000-000000000002",
       "description": "I give the residue of my self-acquired property to my wife Priya Sharma.",
       "notes": "This bequest covers self-acquired property only. Coparcenary property devolves by survivorship and is outside the scope of this will."

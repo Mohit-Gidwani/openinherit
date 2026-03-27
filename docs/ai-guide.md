@@ -80,7 +80,7 @@ estate.testatorPersonId ──────────────► person.id
 bequest.beneficiaryId ────────────────► person.id
 bequest.sourceAssetId ────────────────► asset.id
 executor.personId ────────────────────► person.id
-guardian.guardianPersonId ────────────► person.id
+guardian.personId ────────────────────► person.id
 guardian.childPersonId ───────────────► person.id
 kinship.fromPersonId ─────────────────► person.id
 kinship.toPersonId ───────────────────► person.id
@@ -97,15 +97,15 @@ Every entity has required fields. Omitting them causes validation failure.
 | **estate** | `id`, `testatorPersonId`, `status`, `jurisdiction`, `createdAt`, `lastModifiedAt` |
 | **property** | `id`, `name` |
 | **asset** | `id`, `name`, `category` |
-| **bequest** | `id`, `type` (+ `beneficiaryId` or `beneficiaryOrganisation` for most types) |
+| **bequest** | `id`, `bequestType` (+ `beneficiaryId` or `beneficiaryOrganisation` for most types) |
 | **executor** | `id`, `personId`, `role` |
-| **guardian** | `id`, `guardianPersonId`, `childPersonId`, `role`, `appointmentType` |
-| **liability** | `id`, `type`, `amount` |
-| **wish** | `id`, `type`, `title` |
-| **trust** | `id`, `name`, `type`, `trustees` (min 1), `beneficiaries` (min 1) |
+| **guardian** | `id`, `personId`, `childPersonId`, `role`, `appointmentType` |
+| **liability** | `id`, `liabilityType`, `amount` |
+| **wish** | `id`, `wishType`, `title` |
+| **trust** | `id`, `name`, `trustType`, `trustees` (min 1), `beneficiaries` (min 1) |
 | **document** | `id`, `type`, `title` |
-| **nonprobateTransfer** | `id`, `type`, `passesOutsideEstate` |
-| **kinship** | `id`, `type`, `fromPersonId`, `toPersonId` |
+| **nonprobateTransfer** | `id`, `transferType`, `passesOutsideEstate` |
+| **kinship** | `id`, `kinshipType`, `fromPersonId`, `toPersonId` |
 | **relationship** | `id`, `type`, `partners` (min 2) |
 | **proxyAuthorisation** | `id`, `proxyPersonId`, `testatorPersonId`, `scope`, `consentRecord` |
 | **dealerInterest** | `id`, `interestedParty`, `offerStatus`, `privacyLevel` |
@@ -293,11 +293,11 @@ Use this `tool_use` schema when calling an LLM for extraction. The format is Ant
 | **person** | Any named individual | "I, Margaret Chen, of 14 Elm Road..." | `{ givenName: "Margaret", familyName: "Chen", roles: ["testator"] }` |
 | **property** | Real estate, land | "my freehold property at 14 Elm Road, Bristol" | `{ name: "14 Elm Road, Bristol", tenure: "freehold" }` |
 | **asset** | Financial, personal items | "my Barclays savings account (sort code 20-45-67)" | `{ name: "Barclays savings account", category: "bank_account" }` |
-| **liability** | Debts, mortgages | "the outstanding mortgage with Halifax" | `{ type: "mortgage", creditor: "Halifax" }` |
-| **bequest** | Gifts, shares | "I give £50,000 to my son David" | `{ type: "pecuniary", amount: { amount: 5000000, currency: "GBP" } }` |
+| **liability** | Debts, mortgages | "the outstanding mortgage with Halifax" | `{ liabilityType: "mortgage", creditor: "Halifax" }` |
+| **bequest** | Gifts, shares | "I give £50,000 to my son David" | `{ bequestType: "pecuniary", amount: { amount: 5000000, currency: "GBP" } }` |
 | **executor** | Appointed administrators | "I appoint my wife Susan as executor" | `{ role: "primary" }` (+ person with executor role) |
 | **guardian** | Child guardians | "I appoint my sister Jane as guardian of my children" | `{ role: "guardian", appointmentType: "primary" }` (+ person) |
-| **wish** | Non-binding preferences | "I wish to be cremated" | `{ type: "funeral", title: "Cremation wish" }` |
+| **wish** | Non-binding preferences | "I wish to be cremated" | `{ wishType: "funeral", title: "Cremation wish" }` |
 
 ### Confidence Scoring
 

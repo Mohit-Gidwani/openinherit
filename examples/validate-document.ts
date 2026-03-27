@@ -47,7 +47,7 @@ interface InheritDocument {
   }>;
   guardians: Array<{
     id: string;
-    guardianPersonId: string;
+    personId: string;
     childPersonId: string;
     [key: string]: unknown;
   }>;
@@ -286,14 +286,14 @@ function runLevel2(doc: InheritDocument): { valid: boolean; errors: RefError[] }
     }
   }
 
-  // --- guardian.guardianPersonId and guardian.childPersonId must reference people ---
+  // --- guardian.personId and guardian.childPersonId must reference people ---
   for (let i = 0; i < doc.guardians.length; i++) {
     const guardian = doc.guardians[i];
 
-    if (!personIds.has(guardian.guardianPersonId)) {
+    if (!personIds.has(guardian.personId)) {
       errors.push({
-        path: `/guardians/${i}/guardianPersonId`,
-        message: `Person "${guardian.guardianPersonId}" not found in people array.`,
+        path: `/guardians/${i}/personId`,
+        message: `Person "${guardian.personId}" not found in people array.`,
         explanation:
           `Guardian "${guardian.id}" references a guardian person that does not exist in the people array.`,
       });

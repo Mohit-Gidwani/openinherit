@@ -82,7 +82,7 @@ Appointed to care for the testator's minor children if both parents die. Guardia
 **When to use:** assign this role to anyone named as guardian in the will. The guardian need not be a beneficiary, though they often are.
 
 **Related entities:**
-- `guardian.guardianPersonId` — references this person
+- `guardian.personId` — references this person
 - `guardian.childPersonId` — the child they would care for
 - `guardian.role` — priority (primary, secondary, substitute)
 - `guardian.appointmentType` — how they were appointed
@@ -108,7 +108,7 @@ Manages assets held in a trust. Trustees have a fiduciary duty to administer the
 **Related entities:**
 - `trust.appointees[].personId` — references this person
 - `trust.appointees[].role` — should be `"trustee"`
-- `trust.type` — the type of trust they manage
+- `trust.trustType` — the type of trust they manage
 
 **Example:**
 ```json
@@ -222,7 +222,7 @@ Enforces the terms of a purpose trust or waqf. Purpose trusts (trusts without hu
 **Related entities:**
 - `trust.appointees[].personId` — references this person
 - `trust.appointees[].role` — should be `"enforcer"`
-- `trust.type` — typically `"waqf"` or `"other"` (purpose trust)
+- `trust.trustType` — typically `"waqf"` or `"other"` (purpose trust)
 
 **Example:**
 ```json

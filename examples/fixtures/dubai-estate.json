@@ -88,7 +88,7 @@
   "kinships": [
     {
       "id": "c1000008-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000008-0000-4000-a000-000000000001",
       "toPersonId": "a1000008-0000-4000-a000-000000000003"
     }
@@ -155,7 +155,7 @@
   "liabilities": [
     {
       "id": "11000008-0000-4000-a000-000000000001",
-      "type": "mahr",
+      "liabilityType": "mahr",
       "amount": {
         "amount": 10000000,
         "currency": "AED"
@@ -167,7 +167,7 @@
   "bequests": [
     {
       "id": "b1000008-0000-4000-a000-000000000001",
-      "type": "specific",
+      "bequestType": "specific",
       "beneficiaryId": "a1000008-0000-4000-a000-000000000003",
       "description": "Under the DIFC will: I give my villa at Al Sufouh Gardens, Dubai Marina to my son Ahmed Al-Rashid."
     }

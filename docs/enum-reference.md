@@ -498,7 +498,7 @@ Which legal tradition's witness conflict rules apply.
 
 ## Bequest (bequest.json)
 
-#### `type`
+#### `bequestType`
 Type of testamentary gift.
 
 | Value | Description |
@@ -727,7 +727,7 @@ How guardianship is structured.
 
 ## Kinship (kinship.json)
 
-#### `type`
+#### `kinshipType`
 The biological or legal relationship between two people.
 
 | Value | Description |
@@ -769,7 +769,7 @@ Legitimacy status (relevant for some succession systems).
 
 ## Liability (liability.json)
 
-#### `type`
+#### `liabilityType`
 Type of debt or financial obligation.
 
 | Value | Description |
@@ -794,7 +794,7 @@ Type of debt or financial obligation.
 
 ## Nonprobate Transfer (nonprobate-transfer.json)
 
-#### `type`
+#### `transferType`
 Mechanism by which the asset passes outside probate.
 
 | Value | Description |
@@ -1054,7 +1054,7 @@ Matrimonial property regime governing the relationship.
 
 ## Trust (trust.json)
 
-#### `type`
+#### `trustType`
 Type of trust.
 
 | Value | Description |
@@ -1140,7 +1140,7 @@ Whether the trust can be revoked.
 
 ## Wish (wish.json)
 
-#### `type`
+#### `wishType`
 Category of the testator's wish.
 
 | Value | Description |

@@ -5,16 +5,36 @@
   "description": "A non-binding (or culturally/religiously binding) wish — funeral, letter of wishes, care instructions, pet care, digital estate, distribution preferences.",
   "type": "object",
   "properties": {
-    "id": { "type": "string", "format": "uuid" },
-    "type": {
+    "id": {
       "type": "string",
-      "enum": ["funeral", "letter", "care", "distribution", "digital", "pets", "general"]
+      "format": "uuid"
     },
-    "title": { "type": "string" },
-    "content": { "type": "string" },
+    "wishType": {
+      "type": "string",
+      "enum": [
+        "funeral",
+        "letter",
+        "care",
+        "distribution",
+        "digital",
+        "pets",
+        "general"
+      ]
+    },
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "string"
+    },
     "bindingNature": {
       "type": "string",
-      "enum": ["non_binding", "culturally_obligatory", "religiously_obligatory", "legally_binding"]
+      "enum": [
+        "non_binding",
+        "culturally_obligatory",
+        "religiously_obligatory",
+        "legally_binding"
+      ]
     },
     "addresseePersonId": {
       "type": "string",
@@ -26,9 +46,15 @@
       "format": "uuid",
       "description": "Asset this wish relates to"
     },
-    "notes": { "type": "string" }
+    "notes": {
+      "type": "string"
+    }
   },
-  "required": ["id", "type", "title"],
+  "required": [
+    "id",
+    "wishType",
+    "title"
+  ],
   "patternProperties": {
     "^x-inherit-": {}
   },

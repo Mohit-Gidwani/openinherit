@@ -88,7 +88,7 @@
   "kinships": [
     {
       "id": "c1000006-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000006-0000-4000-a000-000000000001",
       "toPersonId": "a1000006-0000-4000-a000-000000000003"
     }
@@ -141,13 +141,13 @@
   "bequests": [
     {
       "id": "b1000006-0000-4000-a000-000000000001",
-      "type": "specific",
+      "bequestType": "specific",
       "beneficiaryId": "a1000006-0000-4000-a000-000000000002",
       "description": "I give my apartment at Akasaka 1-2-3, Minato-ku, Tokyo to my wife Hanako."
     },
     {
       "id": "b1000006-0000-4000-a000-000000000002",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000006-0000-4000-a000-000000000002",
       "description": "I give the residue of my estate to my wife Hanako."
     }

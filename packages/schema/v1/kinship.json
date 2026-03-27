@@ -9,7 +9,7 @@
       "type": "string",
       "format": "uuid"
     },
-    "type": {
+    "kinshipType": {
       "type": "string",
       "enum": [
         "PARENT_CHILD_BIOLOGICAL",
@@ -39,12 +39,22 @@
     },
     "legalStatus": {
       "type": "string",
-      "enum": ["recognised", "contested", "pending", "unrecognised"],
+      "enum": [
+        "recognised",
+        "contested",
+        "pending",
+        "unrecognised"
+      ],
       "description": "Legal recognition status of this familial bond"
     },
     "legitimacy": {
       "type": "string",
-      "enum": ["legitimate", "illegitimate", "legitimated", "not_applicable"],
+      "enum": [
+        "legitimate",
+        "illegitimate",
+        "legitimated",
+        "not_applicable"
+      ],
       "$comment": "Affects inheritance in Islamic law (illegitimate children don't inherit via faraid), some African customary systems, and pre-1970 English law. Use 'not_applicable' where the distinction has been abolished."
     },
     "adoptionDate": {
@@ -60,7 +70,12 @@
       "type": "string"
     }
   },
-  "required": ["id", "type", "fromPersonId", "toPersonId"],
+  "required": [
+    "id",
+    "kinshipType",
+    "fromPersonId",
+    "toPersonId"
+  ],
   "patternProperties": {
     "^x-inherit-": {}
   },

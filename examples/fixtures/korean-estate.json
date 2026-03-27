@@ -86,7 +86,7 @@
   "kinships": [
     {
       "id": "c1000010-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000010-0000-4000-a000-000000000001",
       "toPersonId": "a1000010-0000-4000-a000-000000000003"
     }
@@ -173,14 +173,14 @@
   "bequests": [
     {
       "id": "b1000010-0000-4000-a000-000000000001",
-      "type": "specific",
+      "bequestType": "specific",
       "beneficiaryId": "a1000010-0000-4000-a000-000000000002",
       "description": "I give my apartment at Teheran-ro 152, Gangnam-gu, Seoul to my husband Park Min-ho.",
       "notes": "Under Korean Civil Code Article 1009, the surviving spouse's intestate share is 1.5× a child's share. By specifically bequeathing the apartment, the testator ensures Min-ho receives the primary residence without the need for partition proceedings (상속재산분할)."
     },
     {
       "id": "b1000010-0000-4000-a000-000000000002",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000010-0000-4000-a000-000000000003",
       "description": "I give the residue of my estate, including the jeonse deposit and all financial accounts, to my daughter Kim Ji-yeon."
     }

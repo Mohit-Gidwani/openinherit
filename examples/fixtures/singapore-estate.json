@@ -61,7 +61,7 @@
   "kinships": [
     {
       "id": "c1000005-0000-4000-a000-000000000001",
-      "type": "PARENT_CHILD_BIOLOGICAL",
+      "kinshipType": "PARENT_CHILD_BIOLOGICAL",
       "fromPersonId": "a1000005-0000-4000-a000-000000000001",
       "toPersonId": "a1000005-0000-4000-a000-000000000003"
     }
@@ -135,7 +135,7 @@
   "bequests": [
     {
       "id": "b1000005-0000-4000-a000-000000000001",
-      "type": "residuary",
+      "bequestType": "residuary",
       "beneficiaryId": "a1000005-0000-4000-a000-000000000002",
       "description": "I give the residue of my estate to my wife Lim Shu Fen."
     }
@@ -154,7 +154,7 @@
   "nonprobateTransfers": [
     {
       "id": "a2000005-0000-4000-a000-000000000001",
-      "type": "cpf_nomination",
+      "transferType": "cpf_nomination",
       "passesOutsideEstate": true,
       "assetIds": [
         "51000005-0000-4000-a000-000000000001"

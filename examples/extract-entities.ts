@@ -496,7 +496,7 @@ function assembleInheritDocument(
           findPersonIdByPartialName(personNameToId, childName);
         guardians.push({
           id,
-          guardianPersonId: guardianPersonId ?? "UNRESOLVED",
+          personId: guardianPersonId ?? "UNRESOLVED",
           childPersonId: childPersonId ?? "UNRESOLVED",
         });
         break;
@@ -624,7 +624,7 @@ async function main(): Promise<void> {
   const unresolvedCount = allEntities.filter(
     (e) =>
       (e as Record<string, unknown>).personId === "UNRESOLVED" ||
-      (e as Record<string, unknown>).guardianPersonId === "UNRESOLVED" ||
+      (e as Record<string, unknown>).personId === "UNRESOLVED" ||
       (e as Record<string, unknown>).childPersonId === "UNRESOLVED"
   ).length;
 

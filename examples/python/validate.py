@@ -293,7 +293,7 @@ def run_level2(document: dict) -> tuple[bool, list[dict]]:
       - estate.testatorPersonId must reference a person
       - bequest.beneficiaryId must reference a person (when present)
       - executor.personId must reference a person
-      - guardian.guardianPersonId must reference a person
+      - guardian.personId must reference a person
       - guardian.childPersonId must reference a person
 
     Returns (passed, error_list) where each error is a dict with
@@ -343,13 +343,13 @@ def run_level2(document: dict) -> tuple[bool, list[dict]]:
                 ),
             })
 
-    # --- guardian.guardianPersonId must reference a person ---
+    # --- guardian.personId must reference a person ---
     # --- guardian.childPersonId must reference a person ---
     for i, guardian in enumerate(document.get("guardians", [])):
-        guardian_person_id = guardian.get("guardianPersonId")
+        guardian_person_id = guardian.get("personId")
         if guardian_person_id and guardian_person_id not in person_ids:
             errors.append({
-                "path": f"/guardians/{i}/guardianPersonId",
+                "path": f"/guardians/{i}/personId",
                 "message": f'Person "{guardian_person_id}" not found in people array.',
                 "explanation": (
                     f'Guardian "{guardian.get("id", "unknown")}" references a guardian'

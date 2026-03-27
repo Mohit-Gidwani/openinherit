@@ -1,13 +1,15 @@
 [
   {
     "description": "bequest schema",
-    "schema": { "$ref": "https://openinherit.org/v1/bequest.json" },
+    "schema": {
+      "$ref": "https://openinherit.org/v1/bequest.json"
+    },
     "tests": [
       {
         "description": "valid specific bequest with beneficiaryId",
         "data": {
           "id": "b0000001-0000-0000-0000-000000000001",
-          "type": "specific",
+          "bequestType": "specific",
           "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
           "description": "My Rolex Submariner watch"
         },
@@ -17,7 +19,7 @@
         "description": "valid specific bequest with beneficiaryOrganisation",
         "data": {
           "id": "b0000001-0000-0000-0000-000000000002",
-          "type": "specific",
+          "bequestType": "specific",
           "beneficiaryOrganisation": {
             "name": "British Heart Foundation",
             "type": "charity",
@@ -31,16 +33,19 @@
         "description": "valid pecuniary bequest",
         "data": {
           "id": "b0000001-0000-0000-0000-000000000003",
-          "type": "pecuniary",
+          "bequestType": "pecuniary",
           "beneficiaryId": "a0000001-0000-0000-0000-000000000002",
-          "amount": { "amount": 1000000, "currency": "GBP" }
+          "amount": {
+            "amount": 1000000,
+            "currency": "GBP"
+          }
         },
         "valid": true
       },
       {
         "description": "invalid — missing required id",
         "data": {
-          "type": "specific",
+          "bequestType": "specific",
           "beneficiaryId": "a0000001-0000-0000-0000-000000000001",
           "description": "My watch"
         },
@@ -59,7 +64,7 @@
         "description": "invalid — unknown type value",
         "data": {
           "id": "b0000001-0000-0000-0000-000000000001",
-          "type": "magic",
+          "bequestType": "magic",
           "beneficiaryId": "a0000001-0000-0000-0000-000000000001"
         },
         "valid": false

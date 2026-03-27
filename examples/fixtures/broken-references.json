@@ -37,7 +37,7 @@
   "bequests": [
     {
       "id": "b1000009-0000-4000-a000-000000000001",
-      "type": "pecuniary",
+      "bequestType": "pecuniary",
       "beneficiaryId": "00000000-0000-4000-a000-999999999999",
       "amount": {
         "amount": 500000,
