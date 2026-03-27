@@ -43,7 +43,7 @@ You do not need to be technical. Many partners provide legal expertise while we 
 If you do want to contribute technically:
 - A GitHub account
 - Basic familiarity with JSON (or willingness to learn — it takes an hour)
-- Read the [Extension Maintainer Guide](extension-maintainer-guide.md)
+- Read the [Extension Maintainer Guide](https://www.openinherit.org/partners/maintainer-guide)
 
 ## How to Apply
 
