@@ -354,59 +354,109 @@ components:
       additionalProperties: false
     TestamentaryCapacity:
       type: object
+      description: Record of testamentary capacity assessment. The testator must understand the nature of making a will, the extent of their estate, and the claims of those they are excluding.
       properties:
         assessed:
           type: boolean
+          description: Whether a capacity assessment was carried out.
+          examples:
+            - true
         assessmentDate:
           type: string
           format: date
+          description: Date the capacity assessment took place.
+          examples:
+            - '2024-03-10'
         assessorName:
           type: string
+          description: Name of the person who assessed capacity.
+          examples:
+            - Dr Sarah Patel
+            - Dr Kenji Watanabe
         assessorRole:
           type: string
+          description: Professional role of the assessor — typically a GP, psychiatrist, or solicitor.
+          examples:
+            - General Practitioner
+            - Consultant Psychiatrist
+            - Solicitor
         capacityConfirmed:
           type: boolean
+          description: Whether the assessor confirmed the testator has testamentary capacity.
+          examples:
+            - true
         goldenRuleComplied:
           type: boolean
           $comment: The 'golden rule' (Kenward v Adams [1975]) — elderly/seriously ill testators should have a medical practitioner assess capacity.
+          description: Whether the 'golden rule' was followed — a medical practitioner assessing capacity for elderly or seriously ill testators.
         notes:
           type: string
+          description: Additional notes on the capacity assessment.
+          examples:
+            - Testator showed clear understanding of estate and family circumstances
       additionalProperties: false
     Codicil:
       type: object
+      description: An amendment to an existing will. Codicils must be executed with the same formalities as the will itself.
       properties:
         id:
           type: string
           format: uuid
+          description: Unique identifier for this codicil.
+          examples:
+            - a1b2c3d4-e5f6-7890-abcd-ef1234567890
         date:
           type: string
           format: date
+          description: Date the codicil was executed.
+          examples:
+            - '2024-06-15'
         description:
           type: string
+          description: Summary of what this codicil changes in the original will.
+          examples:
+            - Replaces executor appointment — substitutes daughter for brother-in-law
         attestation:
           $ref: '#/components/schemas/attestation'
+          description: Execution formalities for this codicil.
         documentId:
           type: string
           format: uuid
+          description: Reference to the Document entity storing the codicil text.
       required:
         - id
         - date
       additionalProperties: false
     ForcedHeirship:
       type: object
+      description: Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will.
       properties:
         applies:
           type: boolean
+          description: Whether forced heirship rules apply to this estate.
+          examples:
+            - true
         reservedPortion:
           type: number
           minimum: 0
           maximum: 100
+          description: Percentage of the estate reserved for protected heirs. In France, this is 50% for one child, 66.67% for two, 75% for three or more.
+          examples:
+            - 50
+            - 66.67
+            - 75
         disposableQuota:
           type: number
           minimum: 0
           maximum: 100
+          description: Percentage of the estate the testator may freely dispose of by will.
+          examples:
+            - 50
+            - 33.33
+            - 25
         jurisdiction:
           $ref: '#/components/schemas/jurisdiction'
+          description: The jurisdiction whose forced heirship rules apply.
         claimNature:
           type: string
           enum:
@@ -414,6 +464,11 @@ components:
             - cash_claim
             - usufruct
             - court_discretion
+          $comment: 'property_share: heir receives a share of the actual estate property (France, Germany). cash_claim: heir has a monetary claim against the estate but not a property right (Switzerland post-2023, Japan). usufruct: heir receives a right of use/enjoyment, not ownership (some Spanish regions). court_discretion: court decides the form of provision (England and Wales — Inheritance Act 1975).'
+          description: The legal nature of the forced heir's claim — whether they receive property, cash, or a court-determined provision.
+          examples:
+            - property_share
+            - cash_claim
         calculationBasis:
           type: string
           enum:
@@ -421,6 +476,11 @@ components:
             - per_child_sliding
             - court_discretion
             - conditional
+          $comment: 'fixed: a set percentage regardless of family size (Japan: 50% of intestate share). per_child_sliding: varies by number of children (France). court_discretion: no fixed formula — court determines reasonable provision (England and Wales). conditional: depends on specific conditions being met.'
+          description: How the reserved portion is calculated.
+          examples:
+            - fixed
+            - per_child_sliding
         applicableTo:
           type: string
           enum:
@@ -428,20 +488,39 @@ components:
             - children_and_spouse
             - all_descendants
             - all_heirs
+          $comment: 'children_only: only direct children are protected heirs. children_and_spouse: surviving spouse and children are protected. all_descendants: includes grandchildren and further issue. all_heirs: all persons in the intestacy hierarchy (rare).'
+          description: Which categories of heir are protected by forced heirship.
+          examples:
+            - children_and_spouse
         deferralRule:
           type: string
+          description: Rule for deferring forced heirship claims — e.g. life interest to surviving spouse with remainder to children.
+          examples:
+            - Surviving spouse receives usufruct; children receive bare ownership
         effectiveDate:
           type: string
           format: date
           $comment: 'When these forced heirship rules took effect. Swiss 2023 reform: 2023-01-01.'
+          description: Date when the applicable forced heirship rules came into force. Important for reform transitions.
+          examples:
+            - '2023-01-01'
+            - '2006-07-01'
         reformVersion:
           type: string
           $comment: e.g., 'Swiss Code 2023 revision', 'French loi 2006-728'.
+          description: The specific legislative reform establishing these rules.
+          examples:
+            - Swiss Code 2023 revision
+            - French loi 2006-728
         notes:
           type: string
+          description: Additional notes on forced heirship — exceptions, pending challenges, or reform context.
+          examples:
+            - Swiss 2023 reform reduced children's reserved portion from 75% to 50%
       additionalProperties: false
     AdjudicatingBody:
       type: object
+      description: A court or authority with jurisdiction over this estate or part of it. Plural legal systems may have multiple adjudicating bodies for the same estate.
       properties:
         type:
           type: string
@@ -458,72 +537,150 @@ components:
             - karta_decision
             - maori_land_court
             - high_court
+          $comment: 'secular_court: state civil or probate court. religious_court: a religious tribunal (unspecified denomination). beth_din: Jewish rabbinical court. shariah_court: Islamic law court. tribal_court: indigenous/tribal judicial body. family_court: state family division. family_council: collective family decision-making body (West African, Pacific Island). community_elders: informal elder-led adjudication. partition_meeting: Hindu joint family partition proceedings. karta_decision: decision by the karta (manager) of a Hindu Undivided Family. maori_land_court: New Zealand court for Maori land succession. high_court: national or state high court (typically for contested probate).'
+          description: The type of adjudicating body.
         name:
           type: string
+          description: Name of the specific court or body.
+          examples:
+            - Principal Registry of the Family Division
+            - Lagos High Court
+            - Beth Din of Manchester
         jurisdiction:
           $ref: '#/components/schemas/jurisdiction'
+          description: Jurisdiction this adjudicating body operates in.
         caseReference:
           type: string
+          description: Case or filing reference number.
+          examples:
+            - PR-2025-001234
+            - SH/2025/0456
         authoritative:
           type: boolean
+          description: Whether this body's decisions are binding. A beth din ruling may be persuasive but not enforceable without secular court recognition.
+          examples:
+            - true
+            - false
       required:
         - type
       additionalProperties: false
     ParallelDistribution:
       type: object
+      description: A parallel distribution scheme operating alongside the primary estate distribution. Common in plural legal systems where statutory and customary/religious distributions run concurrently.
       properties:
         system:
           type: string
+          description: The legal system governing this parallel distribution.
+          examples:
+            - Igbo customary law
+            - Islamic faraid
+            - Hindu Mitakshara
         jurisdiction:
           $ref: '#/components/schemas/jurisdiction'
+          description: Jurisdiction where this parallel distribution applies.
         description:
           type: string
+          description: Summary of how this system distributes the estate.
+          examples:
+            - Family compound passes to eldest son as custodian under Igbo customary law
         notes:
           type: string
+          description: Additional context or conflict notes.
+          examples:
+            - Customary distribution of family land conflicts with testamentary gift to daughter
       required:
         - system
       additionalProperties: false
     ProbateGrant:
       type: object
+      description: A grant of probate or letters of administration issued by a court. Without a grant, executors have no legal authority to administer the estate.
       properties:
         grantType:
           type: string
+          description: The type of grant issued.
+          examples:
+            - Grant of Probate
+            - Letters of Administration
+            - Letters of Administration with Will Annexed
+            - European Certificate of Succession
         grantDate:
           type: string
           format: date
+          description: Date the grant was issued by the court.
+          examples:
+            - '2025-06-15'
         grantReference:
           type: string
+          description: Court reference number for the grant.
+          examples:
+            - PRO-2025-123456
         issuingCourt:
           type: string
+          description: Name of the court or registry that issued the grant.
+          examples:
+            - Principal Registry of the Family Division
+            - Birmingham District Probate Registry
+            - Supreme Court of New South Wales
         jurisdiction:
           $ref: '#/components/schemas/jurisdiction'
+          description: Jurisdiction that issued this grant.
         notes:
           type: string
+          description: Additional notes about the grant.
+          examples:
+            - Limited grant — foreign property excluded
       additionalProperties: false
     DeathRecord:
       type: object
+      description: Details of the testator's death. Establishes the date from which succession takes effect and the domicile at death (which determines governing law for moveables).
       properties:
         dateOfDeath:
           type: string
           format: date
+          description: Date of death in ISO 8601 format.
+          examples:
+            - '2025-09-30'
         placeOfDeath:
           type: string
+          description: Place where death occurred.
+          examples:
+            - Manchester Royal Infirmary
+            - At home, 42 Acacia Avenue, London
+            - Tokyo Metropolitan Hospital
         deathCertificateRef:
           type: string
+          description: Death certificate reference number.
+          examples:
+            - DC-2025-123456
         domicileAtDeath:
           $ref: '#/components/schemas/jurisdiction'
+          description: The testator's domicile at the time of death. This determines which succession law governs moveable property.
         notes:
           type: string
+          description: Additional notes about the death record.
+          examples:
+            - Death registered in two jurisdictions — UK and France
       additionalProperties: false
     SuccessionConflict:
       type: object
+      description: A conflict between legal systems regarding succession for this estate. Common in plural jurisdictions and cross-border estates.
       properties:
         description:
           type: string
+          description: Summary of the conflict between legal systems.
+          examples:
+            - Statutory will gives daughter the house; Igbo customary law gives eldest son custodianship
+            - French forced heirship claim conflicts with English testamentary freedom
         systems:
           type: array
           items:
             type: string
+          description: The legal systems in conflict.
+          examples:
+            - - statutory
+              - Igbo customary
+            - - French civil law
+              - English common law
         resolutionStatus:
           type: string
           enum:
@@ -531,8 +688,13 @@ components:
             - resolved
             - pending_court
             - pending_arbitration
+          $comment: 'unresolved: no resolution attempt yet. resolved: conflict has been settled. pending_court: matter referred to a court. pending_arbitration: matter referred to arbitration or mediation.'
+          description: Current status of this conflict.
         notes:
           type: string
+          description: Additional context or resolution details.
+          examples:
+            - Family council meeting scheduled for December 2025
       required:
         - description
       additionalProperties: false
@@ -545,59 +707,109 @@ components:
       $defs:
         Codicil:
           type: object
+          description: An amendment to an existing will. Codicils must be executed with the same formalities as the will itself.
           properties:
             id:
               type: string
               format: uuid
+              description: Unique identifier for this codicil.
+              examples:
+                - a1b2c3d4-e5f6-7890-abcd-ef1234567890
             date:
               type: string
               format: date
+              description: Date the codicil was executed.
+              examples:
+                - '2024-06-15'
             description:
               type: string
+              description: Summary of what this codicil changes in the original will.
+              examples:
+                - Replaces executor appointment — substitutes daughter for brother-in-law
             attestation:
               $ref: '#/components/schemas/attestation'
+              description: Execution formalities for this codicil.
             documentId:
               type: string
               format: uuid
+              description: Reference to the Document entity storing the codicil text.
           required:
             - id
             - date
           additionalProperties: false
         TestamentaryCapacity:
           type: object
+          description: Record of testamentary capacity assessment. The testator must understand the nature of making a will, the extent of their estate, and the claims of those they are excluding.
           properties:
             assessed:
               type: boolean
+              description: Whether a capacity assessment was carried out.
+              examples:
+                - true
             assessmentDate:
               type: string
               format: date
+              description: Date the capacity assessment took place.
+              examples:
+                - '2024-03-10'
             assessorName:
               type: string
+              description: Name of the person who assessed capacity.
+              examples:
+                - Dr Sarah Patel
+                - Dr Kenji Watanabe
             assessorRole:
               type: string
+              description: Professional role of the assessor — typically a GP, psychiatrist, or solicitor.
+              examples:
+                - General Practitioner
+                - Consultant Psychiatrist
+                - Solicitor
             capacityConfirmed:
               type: boolean
+              description: Whether the assessor confirmed the testator has testamentary capacity.
+              examples:
+                - true
             goldenRuleComplied:
               type: boolean
               $comment: The 'golden rule' (Kenward v Adams [1975]) — elderly/seriously ill testators should have a medical practitioner assess capacity.
+              description: Whether the 'golden rule' was followed — a medical practitioner assessing capacity for elderly or seriously ill testators.
             notes:
               type: string
+              description: Additional notes on the capacity assessment.
+              examples:
+                - Testator showed clear understanding of estate and family circumstances
           additionalProperties: false
         ForcedHeirship:
           type: object
+          description: Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will.
           properties:
             applies:
               type: boolean
+              description: Whether forced heirship rules apply to this estate.
+              examples:
+                - true
             reservedPortion:
               type: number
               minimum: 0
               maximum: 100
+              description: Percentage of the estate reserved for protected heirs. In France, this is 50% for one child, 66.67% for two, 75% for three or more.
+              examples:
+                - 50
+                - 66.67
+                - 75
             disposableQuota:
               type: number
               minimum: 0
               maximum: 100
+              description: Percentage of the estate the testator may freely dispose of by will.
+              examples:
+                - 50
+                - 33.33
+                - 25
             jurisdiction:
               $ref: '#/components/schemas/jurisdiction'
+              description: The jurisdiction whose forced heirship rules apply.
             claimNature:
               type: string
               enum:
@@ -605,6 +817,11 @@ components:
                 - cash_claim
                 - usufruct
                 - court_discretion
+              $comment: 'property_share: heir receives a share of the actual estate property (France, Germany). cash_claim: heir has a monetary claim against the estate but not a property right (Switzerland post-2023, Japan). usufruct: heir receives a right of use/enjoyment, not ownership (some Spanish regions). court_discretion: court decides the form of provision (England and Wales — Inheritance Act 1975).'
+              description: The legal nature of the forced heir's claim — whether they receive property, cash, or a court-determined provision.
+              examples:
+                - property_share
+                - cash_claim
             calculationBasis:
               type: string
               enum:
@@ -612,6 +829,11 @@ components:
                 - per_child_sliding
                 - court_discretion
                 - conditional
+              $comment: 'fixed: a set percentage regardless of family size (Japan: 50% of intestate share). per_child_sliding: varies by number of children (France). court_discretion: no fixed formula — court determines reasonable provision (England and Wales). conditional: depends on specific conditions being met.'
+              description: How the reserved portion is calculated.
+              examples:
+                - fixed
+                - per_child_sliding
             applicableTo:
               type: string
               enum:
@@ -619,20 +841,39 @@ components:
                 - children_and_spouse
                 - all_descendants
                 - all_heirs
+              $comment: 'children_only: only direct children are protected heirs. children_and_spouse: surviving spouse and children are protected. all_descendants: includes grandchildren and further issue. all_heirs: all persons in the intestacy hierarchy (rare).'
+              description: Which categories of heir are protected by forced heirship.
+              examples:
+                - children_and_spouse
             deferralRule:
               type: string
+              description: Rule for deferring forced heirship claims — e.g. life interest to surviving spouse with remainder to children.
+              examples:
+                - Surviving spouse receives usufruct; children receive bare ownership
             effectiveDate:
               type: string
               format: date
               $comment: 'When these forced heirship rules took effect. Swiss 2023 reform: 2023-01-01.'
+              description: Date when the applicable forced heirship rules came into force. Important for reform transitions.
+              examples:
+                - '2023-01-01'
+                - '2006-07-01'
             reformVersion:
               type: string
               $comment: e.g., 'Swiss Code 2023 revision', 'French loi 2006-728'.
+              description: The specific legislative reform establishing these rules.
+              examples:
+                - Swiss Code 2023 revision
+                - French loi 2006-728
             notes:
               type: string
+              description: Additional notes on forced heirship — exceptions, pending challenges, or reform context.
+              examples:
+                - Swiss 2023 reform reduced children's reserved portion from 75% to 50%
           additionalProperties: false
         AdjudicatingBody:
           type: object
+          description: A court or authority with jurisdiction over this estate or part of it. Plural legal systems may have multiple adjudicating bodies for the same estate.
           properties:
             type:
               type: string
@@ -649,72 +890,150 @@ components:
                 - karta_decision
                 - maori_land_court
                 - high_court
+              $comment: 'secular_court: state civil or probate court. religious_court: a religious tribunal (unspecified denomination). beth_din: Jewish rabbinical court. shariah_court: Islamic law court. tribal_court: indigenous/tribal judicial body. family_court: state family division. family_council: collective family decision-making body (West African, Pacific Island). community_elders: informal elder-led adjudication. partition_meeting: Hindu joint family partition proceedings. karta_decision: decision by the karta (manager) of a Hindu Undivided Family. maori_land_court: New Zealand court for Maori land succession. high_court: national or state high court (typically for contested probate).'
+              description: The type of adjudicating body.
             name:
               type: string
+              description: Name of the specific court or body.
+              examples:
+                - Principal Registry of the Family Division
+                - Lagos High Court
+                - Beth Din of Manchester
             jurisdiction:
               $ref: '#/components/schemas/jurisdiction'
+              description: Jurisdiction this adjudicating body operates in.
             caseReference:
               type: string
+              description: Case or filing reference number.
+              examples:
+                - PR-2025-001234
+                - SH/2025/0456
             authoritative:
               type: boolean
+              description: Whether this body's decisions are binding. A beth din ruling may be persuasive but not enforceable without secular court recognition.
+              examples:
+                - true
+                - false
           required:
             - type
           additionalProperties: false
         ParallelDistribution:
           type: object
+          description: A parallel distribution scheme operating alongside the primary estate distribution. Common in plural legal systems where statutory and customary/religious distributions run concurrently.
           properties:
             system:
               type: string
+              description: The legal system governing this parallel distribution.
+              examples:
+                - Igbo customary law
+                - Islamic faraid
+                - Hindu Mitakshara
             jurisdiction:
               $ref: '#/components/schemas/jurisdiction'
+              description: Jurisdiction where this parallel distribution applies.
             description:
               type: string
+              description: Summary of how this system distributes the estate.
+              examples:
+                - Family compound passes to eldest son as custodian under Igbo customary law
             notes:
               type: string
+              description: Additional context or conflict notes.
+              examples:
+                - Customary distribution of family land conflicts with testamentary gift to daughter
           required:
             - system
           additionalProperties: false
         ProbateGrant:
           type: object
+          description: A grant of probate or letters of administration issued by a court. Without a grant, executors have no legal authority to administer the estate.
           properties:
             grantType:
               type: string
+              description: The type of grant issued.
+              examples:
+                - Grant of Probate
+                - Letters of Administration
+                - Letters of Administration with Will Annexed
+                - European Certificate of Succession
             grantDate:
               type: string
               format: date
+              description: Date the grant was issued by the court.
+              examples:
+                - '2025-06-15'
             grantReference:
               type: string
+              description: Court reference number for the grant.
+              examples:
+                - PRO-2025-123456
             issuingCourt:
               type: string
+              description: Name of the court or registry that issued the grant.
+              examples:
+                - Principal Registry of the Family Division
+                - Birmingham District Probate Registry
+                - Supreme Court of New South Wales
             jurisdiction:
               $ref: '#/components/schemas/jurisdiction'
+              description: Jurisdiction that issued this grant.
             notes:
               type: string
+              description: Additional notes about the grant.
+              examples:
+                - Limited grant — foreign property excluded
           additionalProperties: false
         DeathRecord:
           type: object
+          description: Details of the testator's death. Establishes the date from which succession takes effect and the domicile at death (which determines governing law for moveables).
           properties:
             dateOfDeath:
               type: string
               format: date
+              description: Date of death in ISO 8601 format.
+              examples:
+                - '2025-09-30'
             placeOfDeath:
               type: string
+              description: Place where death occurred.
+              examples:
+                - Manchester Royal Infirmary
+                - At home, 42 Acacia Avenue, London
+                - Tokyo Metropolitan Hospital
             deathCertificateRef:
               type: string
+              description: Death certificate reference number.
+              examples:
+                - DC-2025-123456
             domicileAtDeath:
               $ref: '#/components/schemas/jurisdiction'
+              description: The testator's domicile at the time of death. This determines which succession law governs moveable property.
             notes:
               type: string
+              description: Additional notes about the death record.
+              examples:
+                - Death registered in two jurisdictions — UK and France
           additionalProperties: false
         SuccessionConflict:
           type: object
+          description: A conflict between legal systems regarding succession for this estate. Common in plural jurisdictions and cross-border estates.
           properties:
             description:
               type: string
+              description: Summary of the conflict between legal systems.
+              examples:
+                - Statutory will gives daughter the house; Igbo customary law gives eldest son custodianship
+                - French forced heirship claim conflicts with English testamentary freedom
             systems:
               type: array
               items:
                 type: string
+              description: The legal systems in conflict.
+              examples:
+                - - statutory
+                  - Igbo customary
+                - - French civil law
+                  - English common law
             resolutionStatus:
               type: string
               enum:
@@ -722,8 +1041,13 @@ components:
                 - resolved
                 - pending_court
                 - pending_arbitration
+              $comment: 'unresolved: no resolution attempt yet. resolved: conflict has been settled. pending_court: matter referred to a court. pending_arbitration: matter referred to arbitration or mediation.'
+              description: Current status of this conflict.
             notes:
               type: string
+              description: Additional context or resolution details.
+              examples:
+                - Family council meeting scheduled for December 2025
           required:
             - description
           additionalProperties: false
@@ -731,9 +1055,13 @@ components:
         id:
           type: string
           format: uuid
+          description: Unique identifier for this estate record.
+          examples:
+            - b2c3d4e5-f6a7-8901-bcde-f12345678901
         testatorPersonId:
           type: string
           format: uuid
+          description: Reference to the Person.id of the testator (the person whose estate this is).
         status:
           type: string
           enum:
@@ -741,8 +1069,14 @@ components:
             - active
             - locked
             - archived
+          $comment: 'draft: estate plan is being prepared, not yet finalised. active: estate plan is current and in effect. locked: estate is in probate or administration — no further changes permitted. archived: estate administration is complete.'
+          description: The lifecycle status of this estate record.
+          examples:
+            - draft
+            - active
         jurisdiction:
           $ref: '#/components/schemas/jurisdiction'
+          description: Primary jurisdiction governing this estate. For cross-border estates, this is the domiciliary jurisdiction.
         willType:
           type: string
           enum:
@@ -755,19 +1089,60 @@ components:
             - holographic
             - notarised
             - privileged_will
+          $comment: 'secular: standard statutory will. religious: will made under a religious legal system (Shariah, halacha). dual: separate secular and religious wills for the same estate. composite: a single will incorporating both secular and religious elements. oral_witnessed: spoken will witnessed by required number of witnesses. oral_customary: spoken will valid under customary law. holographic: handwritten will entirely in the testator''s hand (valid in France, Japan, some US states). notarised: will executed before a notary public (standard in civil law jurisdictions). privileged_will: military or mariner''s will with relaxed formalities.'
+          description: The type of will governing this estate. Determines which formality rules apply.
+          examples:
+            - secular
+            - dual
+            - holographic
         extensionWillType:
           type: string
           $comment: Non-core will types (e.g. jihi_shosho for Japanese holographic wills). Extension schemas validate.
+          description: Extension-specific will type not covered by the core enum. Validated by the relevant extension schema.
+          examples:
+            - jihi_shosho
+            - himitsu_shosho
+            - wasiyya_shariyya
         companionEstateId:
           type: string
           format: uuid
-          $comment: For dual-system estates — links secular and religious estate records.
+          $comment: For dual-system estates — links secular and religious estate records. Also used for companion (household/couples) estates.
+          description: Links to a companion estate record — either a parallel estate under a different legal system, or a household companion's estate.
+        companionLinkStatus:
+          type: string
+          enum:
+            - invited
+            - active
+            - decoupling
+            - decoupled
+          description: Current state of the companion estate link. Absent if the estate has never been linked to a companion.
+          $comment: 'Lifecycle: invited → active → decoupling → decoupled. See docs/companion-estates.md for full semantics.'
+          examples:
+            - active
+            - decoupled
+        linkedAt:
+          type: string
+          format: date
+          description: ISO 8601 date when the companion link became active.
+          examples:
+            - '2026-03-15'
+        decoupledAt:
+          type: string
+          format: date
+          description: ISO 8601 date when the companion link was severed.
+          examples:
+            - '2026-09-01'
         primaryInstrument:
           type: string
           enum:
             - will
             - revocable_trust
             - both
+            - intestacy
+          $comment: 'will: estate passes primarily through the will. revocable_trust: estate passes through a revocable (living) trust — common in US estate planning. both: combination of will and trust. intestacy: no will exists — estate distributes under intestacy rules.'
+          description: The primary instrument governing succession for this estate.
+          examples:
+            - will
             - intestacy
         defaultPropertyRegime:
           type: string
@@ -779,154 +1154,270 @@ components:
             - universal_community
             - participation_in_acquisitions
             - islamic_dower
+          $comment: 'community_property: assets acquired during marriage are jointly owned 50/50 (US community property states, France, Spain). separate_property: each spouse owns what they acquire (England and Wales, most common law). equitable_distribution: court divides property fairly on divorce/death (most US states on divorce). deferred_community: assets are separate during marriage but shared on dissolution (Scandinavia, Germany). universal_community: all assets are joint from marriage (Netherlands pre-2018, some Indonesian adat). participation_in_acquisitions: Swiss regime — separate during marriage, share gains on dissolution. islamic_dower: mahr-based system — property is separate, wife has deferred mahr claim.'
+          description: The default marital property regime for this estate. Determines which assets the testator may freely dispose of.
+          examples:
+            - separate_property
+            - community_property
         totalEstimatedValue:
           $ref: '#/components/schemas/money'
+          description: Estimated total value of the estate before liabilities. In minor currency units.
         attestation:
           $ref: '#/components/schemas/attestation'
+          description: Will execution formalities — witnesses, signing method, and compliance checks.
         testamentaryCapacity:
           $ref: '#/components/schemas/TestamentaryCapacity'
+          description: Record of testamentary capacity assessment for the testator.
         codicils:
           type: array
           items:
             $ref: '#/components/schemas/Codicil'
+          description: Amendments to the will. Each codicil must be executed with proper formalities.
         revokesDocumentIds:
           type: array
           items:
             type: string
             format: uuid
+          description: Document IDs of prior wills or instruments this estate record expressly revokes.
+          examples:
+            - - c3d4e5f6-a7b8-9012-cdef-123456789012
         revocationClause:
           type: boolean
+          description: Whether the will contains a general revocation clause ('I revoke all former wills and testamentary dispositions').
+          examples:
+            - true
         forcedHeirship:
           $ref: '#/components/schemas/ForcedHeirship'
+          description: Forced heirship regime applicable to this estate, if any.
         adjudicatingBodies:
           type: array
           items:
             $ref: '#/components/schemas/AdjudicatingBody'
+          description: Courts and bodies with jurisdiction over this estate. Plural legal systems may involve multiple courts.
         parallelDistributions:
           type: array
           items:
             $ref: '#/components/schemas/ParallelDistribution'
+          description: Parallel distribution schemes under different legal systems — customary, religious, or statutory.
         probateGrant:
           $ref: '#/components/schemas/ProbateGrant'
+          description: The probate grant or letters of administration for this estate.
         deathRecord:
           $ref: '#/components/schemas/DeathRecord'
+          description: Details of the testator's death.
         successionConflicts:
           type: array
           items:
             $ref: '#/components/schemas/SuccessionConflict'
+          description: Known conflicts between legal systems regarding succession for this estate.
         choiceOfLaw:
           type: object
           $comment: Brussels IV Regulation choice of law. Allows EU nationals to choose their nationality's law for succession.
+          description: Choice of law declaration under the Brussels IV Regulation (EU Succession Regulation 650/2012) or equivalent. Allows the testator to choose which jurisdiction's succession law applies.
           properties:
             chosenLaw:
               $ref: '#/components/schemas/jurisdiction'
+              description: The jurisdiction whose law the testator has chosen to govern succession.
             basis:
               type: string
+              description: Legal basis for the choice of law.
+              examples:
+                - Brussels IV Regulation Art. 22 — nationality at time of choice
+                - Hague Convention on the Law Applicable to Succession
             documentRef:
               type: string
+              description: Reference to the document containing the choice of law declaration.
+              examples:
+                - DOC-2024-COL-001
           additionalProperties: false
         electiveShareRight:
           type: object
           $comment: US — surviving spouse's right to elect against the will.
+          description: Surviving spouse's elective share right (US). Allows the spouse to claim a statutory share of the estate regardless of the will's provisions.
           properties:
             available:
               type: boolean
+              description: Whether elective share is available in this jurisdiction.
+              examples:
+                - true
             electedAmount:
               $ref: '#/components/schemas/money'
+              description: The amount elected by the surviving spouse, if the election has been made.
             statute:
               type: string
+              description: The statute governing elective share in this jurisdiction.
+              examples:
+                - Uniform Probate Code §2-202
+                - New York EPTL §5-1.1-A
             notes:
               type: string
+              description: Additional notes on the elective share.
+              examples:
+                - Augmented estate calculation includes revocable trust assets
           additionalProperties: false
         priorMatrimonialClaim:
           type: object
+          description: A prior matrimonial claim against the estate — typically from a former spouse under a financial order.
           properties:
             exists:
               type: boolean
+              description: Whether a prior matrimonial claim exists.
+              examples:
+                - true
             description:
               type: string
+              description: Description of the claim.
+              examples:
+                - Former wife has lump sum order of £50,000 outstanding from 2018 divorce
             claimantPersonId:
               type: string
               format: uuid
+              description: Reference to the Person.id of the claimant.
             notes:
               type: string
+              description: Additional context.
+              examples:
+                - Clean break order obtained — no further claims
           additionalProperties: false
         noContestClause:
           type: object
           $comment: In terrorem clause — beneficiary forfeits gift if they challenge the will.
+          description: In terrorem (no-contest) clause — a provision that a beneficiary forfeits their gift if they challenge the will. Enforceability varies by jurisdiction.
           properties:
             present:
               type: boolean
+              description: Whether the will contains a no-contest clause.
+              examples:
+                - true
             enforceability:
               type: string
+              description: Enforceability status in the governing jurisdiction.
+              examples:
+                - Enforceable in Florida
+                - Generally unenforceable in England and Wales
+                - Enforceable unless probable cause exists (California)
             notes:
               type: string
+              description: Additional context about the clause.
+              examples:
+                - Clause includes safe harbour for challenges brought in good faith
           additionalProperties: false
         pretermittedHeirClaims:
           type: array
           $comment: Claims by children born/adopted after the will was made.
+          description: Claims by pretermitted heirs — children born or adopted after the will was executed who are not mentioned in it.
           items:
             type: object
             properties:
               claimantPersonId:
                 type: string
                 format: uuid
+                description: Reference to the Person.id of the pretermitted heir.
               status:
                 type: string
+                description: Current status of this claim.
+                examples:
+                  - pending
+                  - settled
+                  - dismissed
+                  - intestate share awarded
               notes:
                 type: string
+                description: Additional context about the claim.
+                examples:
+                  - Child born 2023, will executed 2020 — no mention in will or codicil
             additionalProperties: false
         testamentaryPromises:
           type: array
           $comment: NZ — claims under the Law Reform (Testamentary Promises) Act 1949.
+          description: Claims under the Law Reform (Testamentary Promises) Act 1949 (New Zealand). Allows claims by persons who provided services to the deceased in reliance on a promise of testamentary provision.
           items:
             type: object
             properties:
               claimantPersonId:
                 type: string
                 format: uuid
+                description: Reference to the Person.id of the claimant.
               promiseDescription:
                 type: string
+                description: Description of the promise made by the testator.
+                examples:
+                  - Promised to leave the farm to nephew in return for 10 years of farm management
               status:
                 type: string
+                description: Current status of this claim.
+                examples:
+                  - pending
+                  - claim filed
+                  - settled
+                  - dismissed
               notes:
                 type: string
+                description: Additional context.
+                examples:
+                  - Multiple witnesses to the promise — strong claim
             additionalProperties: false
         judicialVariationPower:
           type: object
           $comment: UK/NZ — court power to vary a will under the Inheritance (Provision for Family and Dependants) Act 1975 or equivalent.
+          description: Court power to vary a will to make reasonable financial provision for family and dependants. Applies in England and Wales (Inheritance Act 1975), New Zealand, and similar jurisdictions.
           properties:
             available:
               type: boolean
+              description: Whether judicial variation is available in this jurisdiction.
+              examples:
+                - true
             statute:
               type: string
+              description: The statute granting variation power.
+              examples:
+                - Inheritance (Provision for Family and Dependants) Act 1975
+                - Family Protection Act 1955 (NZ)
             notes:
               type: string
+              description: Additional context.
+              examples:
+                - Claim must be brought within 6 months of grant of representation
           additionalProperties: false
         commorientesRule:
           type: object
           $comment: Rule determining order of death when people die in the same event. Varies by jurisdiction.
+          description: Commorientes rule — the legal presumption for order of death when two or more people die in the same event. Critical for determining which estate inherits from which.
           properties:
             applicable:
               type: boolean
+              description: Whether the commorientes rule is relevant to this estate.
+              examples:
+                - true
             rule:
               type: string
+              description: The applicable commorientes rule.
+              examples:
+                - s.184 Law of Property Act 1925 — deaths presumed in order of seniority
+                - Uniform Simultaneous Death Act — treated as if each predeceased the other
             jurisdiction:
               $ref: '#/components/schemas/jurisdiction'
+              description: Jurisdiction whose commorientes rule applies.
             notes:
               type: string
+              description: Additional context — e.g. specific facts of the case.
+              examples:
+                - Husband (72) and wife (68) died in same road traffic accident
           additionalProperties: false
         ancillaryProbate:
           type: array
           $comment: Multi-jurisdiction estate administration. Each entry represents one jurisdiction's administration.
+          description: Ancillary probate proceedings in jurisdictions other than the primary domiciliary jurisdiction. Required when the estate includes assets in foreign jurisdictions.
           items:
             type: object
             properties:
               jurisdiction:
                 $ref: '#/components/schemas/jurisdiction'
+                description: The jurisdiction where ancillary probate is needed.
               fiduciaryPersonId:
                 type: string
                 format: uuid
+                description: Reference to the Person.id of the local fiduciary or administrator.
               status:
                 type: string
                 enum:
@@ -935,30 +1426,60 @@ components:
                   - granted
                   - completed
                   - waived
+                $comment: 'not_started: ancillary probate has not yet been initiated. applied: application has been submitted. granted: grant has been issued. completed: administration in this jurisdiction is finished. waived: ancillary probate is not required (e.g. small estate exemption).'
+                description: Current status of ancillary probate in this jurisdiction.
               grantReference:
                 type: string
+                description: Local grant reference number.
+                examples:
+                  - ANC-2025-FR-001
               localCounsel:
                 type: string
+                description: Name of local legal counsel handling this jurisdiction.
+                examples:
+                  - Maître Dupont, Paris
+                  - Tanaka & Associates, Tokyo
               notes:
                 type: string
+                description: Additional notes.
+                examples:
+                  - French notaire requires apostilled UK grant
             required:
               - jurisdiction
             additionalProperties: false
         registrations:
           type: array
           $comment: Will registries worldwide (DIFC Wills Service Centre, UK Probate Registry, etc.).
+          description: Registrations of the will with official will registries. Not all jurisdictions have will registries, and registration is rarely compulsory.
           items:
             type: object
             properties:
               registry:
                 type: string
+                description: Name of the will registry.
+                examples:
+                  - Certainty National Will Register
+                  - DIFC Wills Service Centre
+                  - Japan Legal Affairs Bureau
               registrationNumber:
                 type: string
+                description: Registration reference number.
+                examples:
+                  - CNWR-2024-123456
+                  - DIFC-W-2024-0789
               jurisdictionScope:
                 type: string
+                description: What the registration covers — may be limited to certain jurisdictions or asset classes.
+                examples:
+                  - England and Wales only
+                  - DIFC-registered assets only
+                  - Worldwide
               registrationDate:
                 type: string
                 format: date
+                description: Date the will was registered.
+                examples:
+                  - '2024-07-01'
             required:
               - registry
             additionalProperties: false
@@ -966,26 +1487,52 @@ components:
           type: string
           pattern: ^[A-Z]{3}$
           $comment: ISO 4217 currency for probate reporting.
+          description: The currency used for probate reporting and estate accounts. All values in this estate may need converting to this currency.
+          examples:
+            - GBP
+            - USD
+            - EUR
         conversionRates:
           type: array
           $comment: Exchange rates used for estate valuation in cross-border estates.
+          description: Exchange rates used when converting foreign-currency assets to the reporting currency. Document the rate and date to satisfy probate courts.
           items:
             type: object
             properties:
               fromCurrency:
                 type: string
                 pattern: ^[A-Z]{3}$
+                description: Source currency code (ISO 4217).
+                examples:
+                  - EUR
+                  - JPY
               toCurrency:
                 type: string
                 pattern: ^[A-Z]{3}$
+                description: Target currency code (ISO 4217).
+                examples:
+                  - GBP
+                  - USD
               rate:
                 type: number
                 exclusiveMinimum: 0
+                description: Exchange rate — one unit of fromCurrency equals this many units of toCurrency.
+                examples:
+                  - 0.86
+                  - 0.0054
               rateDate:
                 type: string
                 format: date
+                description: Date this exchange rate was sourced.
+                examples:
+                  - '2025-09-30'
               source:
                 type: string
+                description: Source of the exchange rate.
+                examples:
+                  - Bank of England daily rate
+                  - HMRC monthly rate
+                  - XE.com
             required:
               - fromCurrency
               - toCurrency
@@ -995,19 +1542,37 @@ components:
         taxTreatyPositions:
           type: array
           $comment: Bilateral tax treaty claims relevant to the estate.
+          description: Tax treaty positions relevant to the estate. Documents which treaties are being relied upon for double taxation relief.
           items:
             type: object
             properties:
               treaty:
                 type: string
+                description: Name of the bilateral tax treaty.
+                examples:
+                  - UK-US Estate Tax Treaty 1979
+                  - Japan-US Estate Tax Treaty 1955
               primaryTaxingJurisdiction:
                 $ref: '#/components/schemas/jurisdiction'
+                description: The jurisdiction with primary taxing rights under this treaty.
               claimedCredits:
                 type: string
+                description: Tax credits claimed under this treaty.
+                examples:
+                  - Credit for UK IHT against US federal estate tax
+                  - Full exemption under Art. 8
               relevantArticle:
                 type: string
+                description: The specific treaty article being relied upon.
+                examples:
+                  - Art. 5(1)
+                  - Art. 8
+                  - Art. 11(2)(a)
               notes:
                 type: string
+                description: Additional context.
+                examples:
+                  - Treaty predates FATCA — potential interaction with reporting requirements
             required:
               - treaty
             additionalProperties: false
@@ -1016,14 +1581,29 @@ components:
           items:
             type: string
           $comment: Informational. Activity codes computed from estate complexity — e.g. trust_preparation, cross_border, iht_planning. Canonical taxonomy at openinherit.org/reference/practitioner-activities.json.
+          description: Informational list of practitioner activity codes suggesting the types of professional help this estate may need. Computed from estate complexity, not user-entered.
+          examples:
+            - - cross_border
+              - iht_planning
+              - trust_preparation
+            - - simple_probate
         createdAt:
           type: string
           format: date
+          description: Date this estate record was first created.
+          examples:
+            - '2024-01-15'
         lastModifiedAt:
           type: string
           format: date
+          description: Date this estate record was last modified.
+          examples:
+            - '2025-03-27'
         notes:
           type: string
+          description: Free-text notes about the estate. Use for anything not captured by structured fields.
+          examples:
+            - Complex cross-border estate — UK, France, and Singapore assets. Dual will structure.
       required:
         - id
         - testatorPersonId
@@ -1124,41 +1704,97 @@ components:
         id:
           type: string
           format: uuid
+          description: Unique identifier for this person within the INHERIT document. Must be referenced consistently across all entities.
+          examples:
+            - f47ac10b-58cc-4372-a567-0e02b2c3d479
         givenName:
           type: string
           minLength: 1
-          description: 'First/given name (Schema.org: givenName)'
+          description: The person's given (first) name. For cultures where given name follows family name (e.g. Japanese, Chinese), this is still the given name — display ordering is a presentation concern.
+          examples:
+            - James
+            - Margaret
+            - 裕子
+            - Priya
+            - محمد
         familyName:
           type: string
           minLength: 1
           $comment: Optional — Tamil naming uses a single name. Systems must handle absent familyName.
-          description: 'Last/family/surname (Schema.org: familyName)'
+          description: The person's family name (surname). Some cultures do not use family names — Tamil, Icelandic patronymic, and mononymous naming conventions are all valid without this field.
+          examples:
+            - Davies
+            - Nakamura
+            - O'Brien
+            - 김
+            - Müller
         additionalName:
           type: string
-          description: 'Middle name(s) (Schema.org: additionalName)'
+          description: Middle name(s) or additional given names. Multiple middle names should be space-separated.
+          examples:
+            - William
+            - María del Carmen
+            - Raj Kumar
         preferredName:
           type: string
-          description: Name the person prefers to be called
+          description: Name the person prefers to be called. May differ from legal name — use this for correspondence and display where appropriate.
+          examples:
+            - Jim
+            - Maggie
+            - ゆう
+            - Bobby
         phoneticReading:
           type: object
           $comment: 'Required for CJK names. Japanese: furigana/romaji. Chinese: pinyin. Korean: romanisation. Ensures names can be read by non-native systems.'
+          description: Phonetic reading of the person's name. Essential for CJK names to ensure correct pronunciation by non-native speakers and systems.
           properties:
             givenName:
               type: string
+              description: Phonetic reading of the given name.
+              examples:
+                - ゆうこ
+                - Yūko
+                - Wěi
             familyName:
               type: string
+              description: Phonetic reading of the family name.
+              examples:
+                - たなか
+                - Tanaka
+                - Zhāng
             fullName:
               type: string
+              description: Phonetic reading of the complete name as a single string.
+              examples:
+                - たなか ゆうこ
+                - Tanaka Yūko
+                - Zhāng Wěi
           minProperties: 1
           additionalProperties: false
         titles:
           type: array
           $comment: Chieftaincy titles (Nigerian), honorifics (Japanese), caste/clan titles (Indian), religious titles, academic degrees.
+          description: Formal titles held by this person. Multiple titles are common — a person may hold academic, professional, and traditional titles simultaneously.
+          examples:
+            - - title: Dr
+                type: academic
+            - - title: Eze
+                type: chieftaincy
+              - title: Professor
+                type: academic
           items:
             type: object
             properties:
               title:
                 type: string
+                description: The title text itself.
+                examples:
+                  - Dr
+                  - Prof
+                  - Eze
+                  - Rabbi
+                  - Alhaji
+                  - Dame
               type:
                 type: string
                 enum:
@@ -1171,20 +1807,33 @@ components:
                   - academic
                   - military
                   - other
+                $comment: 'chieftaincy: Nigerian/West African chieftaincy title (Eze, Oba, Chief). traditional: hereditary or cultural title not tied to a chieftaincy. religious: Rabbi, Imam, Reverend, Swami. professional: solicitor, barrister, notary. honorific: knighthood, CBE, OBE, MBE. clan: caste or clan-based title (Indian gotra-related). academic: PhD, Professor, Dr. military: Colonel, Brigadier, etc. other: anything not covered above.'
             required:
               - title
             additionalProperties: false
         clanOrLineage:
           type: string
           $comment: Tribal clan, Indian gotra/caste, family lineage. Determines inheritance rights in customary/Hindu systems.
+          description: Clan, tribe, lineage, or gotra affiliation. In some legal systems (Hindu, customary African), this determines inheritance rights and succession order.
+          examples:
+            - Bharadwaja
+            - Ogbuagu
+            - MacDonald
         dateOfBirth:
           type: string
           format: date
-          description: ISO 8601 date of birth
+          description: The person's date of birth in ISO 8601 format. Used to determine age-dependent inheritance rights and guardianship requirements.
+          examples:
+            - '1952-03-15'
+            - '1998-11-22'
+            - '2020-07-01'
         dateOfDeath:
           type: string
           format: date
-          description: ISO 8601 date of death (if deceased)
+          description: The person's date of death in ISO 8601 format, if deceased. Relevant for determining predecease rules, commorientes, and survivorship.
+          examples:
+            - '2025-09-30'
+            - '2024-01-15'
         gender:
           type: string
           enum:
@@ -1194,10 +1843,16 @@ components:
             - other
             - prefer_not_to_say
             - unknown
-          $comment: Optional but needed for gender-dependent inheritance (Islamic faraid, Hindu succession pre-2005). Halachic/Islamic gender categories available via x-inherit-* extensions.
+          $comment: 'Optional but needed for gender-dependent inheritance (Islamic faraid, Hindu succession pre-2005). Halachic/Islamic gender categories available via x-inherit-* extensions. male: legally or self-identified male. female: legally or self-identified female. non_binary: person does not identify as exclusively male or female. other: gender identity not covered by other values. prefer_not_to_say: person has declined to state. unknown: gender has not been recorded.'
+          description: The person's gender. Optional, but required where inheritance rules are gender-dependent (e.g. Islamic faraid, Hindu succession).
+          examples:
+            - female
+            - male
+            - non_binary
         domicile:
           $ref: '#/components/schemas/jurisdiction'
           $comment: Domicile (not residence/nationality) determines succession law for moveables in conflict-of-laws. A British citizen domiciled in France has moveables governed by French forced heirship.
+          description: The person's legal domicile. Domicile — not nationality or residence — determines which succession law governs moveable property.
         roles:
           type: array
           items:
@@ -1215,43 +1870,92 @@ components:
               - enforcer
           minItems: 1
           uniqueItems: true
-          $comment: Core roles define the person's function in the estate. Extension-specific roles (bekhor, karta, okpara, mutawalli) should be added via x-inherit-* blocks alongside core roles. The array is intentionally extensible — a person can be both 'executor' (core) and 'karta' (x-inherit-india-hindu). Extensions should NOT attempt to add values to this enum.
+          $comment: 'testator: the person whose estate this is. beneficiary: someone who receives a gift or share. executor: appointed to administer the estate. guardian: appointed to care for minor children. trustee: manages trust assets. witness: attested the will signing. attorney: holds power of attorney. proxy: authorised to act on behalf of a party. protector: oversees a trust. enforcer: enforces trust terms (common in Islamic trusts and Cayman STAR trusts). Core roles define the person''s function in the estate. Extension-specific roles (bekhor, karta, okpara, mutawalli) should be added via x-inherit-* blocks alongside core roles. The array is intentionally extensible — a person can be both ''executor'' (core) and ''karta'' (x-inherit-india-hindu). Extensions should NOT attempt to add values to this enum.'
+          description: The roles this person plays in the estate. A person may hold multiple roles simultaneously (e.g. beneficiary and executor).
+          examples:
+            - - testator
+            - - beneficiary
+              - executor
+            - - witness
+            - - trustee
+              - protector
         contact:
           type: object
+          description: Contact details for this person. All fields are optional — some parties may have no known contact information.
           properties:
             email:
               type: string
               format: email
+              description: Email address for correspondence.
+              examples:
+                - james.davies@example.com
+                - tanaka.yuko@example.jp
             phone:
               type: string
-              description: Phone number (E.164 recommended)
+              description: Phone number in E.164 format recommended. National formats are accepted but may be ambiguous across jurisdictions.
+              examples:
+                - +44 7700 900000
+                - +1 212 555 0100
+                - +81 90 1234 5678
             address:
               $ref: '#/components/schemas/address'
+              description: Postal address for this person.
           additionalProperties: false
         identifiers:
           type: array
           items:
             $ref: '#/components/schemas/identifier'
-          description: External identifiers (passport, national ID, etc.)
+          description: External identifiers for this person — passport numbers, national ID, tax reference numbers, etc. Used for probate applications and cross-border identification.
+          examples:
+            - - system: urn:hmrc:nino
+                value: AB123456C
+                type: national_insurance
+            - - system: urn:ssa:ssn
+                value: 123-45-6789
+                type: social_security
         ritualName:
           type: object
           $comment: 'Structured religious name. Hebrew: ''Dovid ben Avraham''. Arabic nasab: ''Ahmed ibn Muhammad''. Hindu: gotra + name. Used for halachic documents, Shariah court filings, religious ceremonies.'
+          description: The person's name within a religious naming tradition. Required for religious court filings, halachic documents, and Shariah proceedings.
           properties:
             name:
               type: string
-              description: The full ritual/religious name
+              description: The full ritual or religious name as used in religious proceedings.
+              examples:
+                - Dovid ben Avraham
+                - Ahmed ibn Muhammad
+                - Lakshmi devi
             patronymic:
               type: string
-              description: Patronymic element (ben/bat, ibn/bint, etc.)
+              description: The patronymic element of the ritual name (ben/bat, ibn/bint, etc.).
+              examples:
+                - ben Avraham
+                - bat Sarah
+                - ibn Muhammad
+                - bint Fatimah
             nameSystem:
               type: string
-              description: 'Naming tradition: hebrew, arabic_nasab, hindu, buddhist, etc.'
+              description: The religious or cultural naming tradition this name follows.
+              examples:
+                - hebrew
+                - arabic_nasab
+                - hindu
+                - buddhist
+                - sikh
           required:
             - name
           additionalProperties: false
         legalPersonalities:
           type: array
           $comment: 'A person can have different legal identities across systems. Under statutory law: property owner. Under customary law: okpara (first son) with custodial authority. Under religious law: a Kohen.'
+          description: Legal personalities this person holds across different legal systems. A single person may have distinct legal identities under statutory, customary, and religious law simultaneously.
+          examples:
+            - - system: statutory
+                role: property owner
+                notes: Registered owner of 3 Acacia Avenue
+            - - system: customary
+                role: okpara
+                notes: First son — custodial authority over family compound
           items:
             type: object
             properties:
@@ -1262,12 +1966,25 @@ components:
                   - customary
                   - religious
                   - traditional
+                $comment: 'statutory: the formal legal system of the jurisdiction. customary: indigenous or customary law (e.g. Nigerian customary law). religious: a religious legal system (halacha, Shariah, canon law). traditional: traditional authority systems not classified as customary law.'
+                description: The legal system under which this personality exists.
               role:
                 type: string
+                description: The person's role or status within this legal system.
+                examples:
+                  - property owner
+                  - okpara
+                  - Kohen
+                  - karta
+                  - mutawalli
               jurisdiction:
                 $ref: '#/components/schemas/jurisdiction'
+                description: The jurisdiction where this legal personality is recognised.
               notes:
                 type: string
+                description: Additional context about this legal personality.
+                examples:
+                  - Recognised as family head by Igbo customary law
             required:
               - system
               - role
@@ -1275,17 +1992,28 @@ components:
         taxResidency:
           type: array
           $comment: Tax residency in one or more jurisdictions. Handles FATCA (US), CRS, JP/US estate tax treaty, expat tax. A person may be tax-resident in multiple jurisdictions simultaneously.
+          description: Tax residency declarations for one or more jurisdictions. A person may be simultaneously tax-resident in multiple countries, triggering reporting obligations under FATCA, CRS, and bilateral treaties.
           items:
             type: object
             properties:
               jurisdiction:
                 $ref: '#/components/schemas/jurisdiction'
+                description: The jurisdiction where this person is tax-resident.
               taxpayerIdentifier:
                 type: string
                 $comment: SSN (US), TFN (AU), My Number (JP), NINO (UK)
+                description: The person's tax identification number in this jurisdiction.
+                examples:
+                  - AB123456C
+                  - 123-45-6789
+                  - 1234 5678 9012
               treatyPosition:
                 type: string
                 $comment: Relevant treaty claim, e.g., 'US-JP Estate Tax Treaty Art. 4'
+                description: Any relevant tax treaty claim that affects estate tax liability in this jurisdiction.
+                examples:
+                  - US-JP Estate Tax Treaty Art. 4
+                  - UK-France Double Taxation Convention Art. 5
               fatcaStatus:
                 type: string
                 enum:
@@ -1293,15 +2021,34 @@ components:
                   - non_us_person
                   - exempt
                   - unknown
-                $comment: FATCA classification. US persons have worldwide reporting obligations.
+                $comment: 'FATCA classification. us_person: US citizen, green card holder, or substantial presence. non_us_person: no US tax obligations. exempt: exempt organisation or foreign government. unknown: FATCA status has not been determined. US persons have worldwide reporting obligations.'
+                description: FATCA (Foreign Account Tax Compliance Act) classification for this person.
             required:
               - jurisdiction
             additionalProperties: false
+        sharedWithCompanion:
+          type: boolean
+          default: false
+          description: Whether this person record is shared with the companion estate. When true, changes sync between linked estates.
+          $comment: Shared people (e.g. children, mutual contacts) appear in both companion estates. On decoupling, each estate gets an independent copy. See docs/companion-estates.md.
+          examples:
+            - true
+            - false
         language:
           type: string
-          description: BCP 47 language tag for preferred language
+          description: BCP 47 language tag for the person's preferred language. Used for correspondence and document generation.
+          examples:
+            - en-GB
+            - ja-JP
+            - ar-SA
+            - hi-IN
+            - fr-FR
         notes:
           type: string
+          description: Free-text notes about this person. Use for anything not captured by structured fields — health conditions, access requirements, or context for professionals.
+          examples:
+            - Requires large-print documents due to visual impairment
+            - Currently residing abroad — use email for all correspondence
       required:
         - id
         - givenName
@@ -2273,6 +3020,20 @@ components:
           description: Links this asset to an asset collection
           examples:
             - b7e2c4a1-3f8d-4e9b-a1c2-d3e4f5a6b7c8
+        ownershipCategory:
+          type: string
+          enum:
+            - joint
+            - sole_partner_interest
+            - sole_no_partner_interest
+            - sole
+          default: sole
+          description: How this asset relates to a companion estate. Determines sync behaviour and visibility between linked estates.
+          $comment: joint = both partners own it. sole_partner_interest = one partner owns it, the other can see it (read-only). sole_no_partner_interest = one partner owns it privately. sole = default for non-coupled estates. See docs/companion-estates.md.
+          examples:
+            - joint
+            - sole_partner_interest
+            - sole
         passesOutsideEstate:
           type: boolean
           $comment: True if this asset passes outside probate (beneficiary designation, POD, TOD). NOT distributed under the will.

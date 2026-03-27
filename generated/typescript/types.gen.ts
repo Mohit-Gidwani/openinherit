@@ -255,74 +255,239 @@ export type Money2 = {
     currency: string;
 };
 
+/**
+ * Record of testamentary capacity assessment. The testator must understand the nature of making a will, the extent of their estate, and the claims of those they are excluding.
+ */
 export type TestamentaryCapacity = {
+    /**
+     * Whether a capacity assessment was carried out.
+     */
     assessed?: boolean;
+    /**
+     * Date the capacity assessment took place.
+     */
     assessmentDate?: string;
+    /**
+     * Name of the person who assessed capacity.
+     */
     assessorName?: string;
+    /**
+     * Professional role of the assessor — typically a GP, psychiatrist, or solicitor.
+     */
     assessorRole?: string;
+    /**
+     * Whether the assessor confirmed the testator has testamentary capacity.
+     */
     capacityConfirmed?: boolean;
+    /**
+     * Whether the 'golden rule' was followed — a medical practitioner assessing capacity for elderly or seriously ill testators.
+     */
     goldenRuleComplied?: boolean;
+    /**
+     * Additional notes on the capacity assessment.
+     */
     notes?: string;
 };
 
+/**
+ * An amendment to an existing will. Codicils must be executed with the same formalities as the will itself.
+ */
 export type Codicil = {
+    /**
+     * Unique identifier for this codicil.
+     */
     id: string;
+    /**
+     * Date the codicil was executed.
+     */
     date: string;
+    /**
+     * Summary of what this codicil changes in the original will.
+     */
     description?: string;
+    /**
+     * Execution formalities for this codicil.
+     */
     attestation?: Attestation2;
+    /**
+     * Reference to the Document entity storing the codicil text.
+     */
     documentId?: string;
 };
 
+/**
+ * Forced heirship regime details. Many civil law jurisdictions reserve a portion of the estate for certain heirs regardless of the will.
+ */
 export type ForcedHeirship = {
+    /**
+     * Whether forced heirship rules apply to this estate.
+     */
     applies?: boolean;
+    /**
+     * Percentage of the estate reserved for protected heirs. In France, this is 50% for one child, 66.67% for two, 75% for three or more.
+     */
     reservedPortion?: number;
+    /**
+     * Percentage of the estate the testator may freely dispose of by will.
+     */
     disposableQuota?: number;
+    /**
+     * The jurisdiction whose forced heirship rules apply.
+     */
     jurisdiction?: Jurisdiction2;
+    /**
+     * The legal nature of the forced heir's claim — whether they receive property, cash, or a court-determined provision.
+     */
     claimNature?: 'property_share' | 'cash_claim' | 'usufruct' | 'court_discretion';
+    /**
+     * How the reserved portion is calculated.
+     */
     calculationBasis?: 'fixed' | 'per_child_sliding' | 'court_discretion' | 'conditional';
+    /**
+     * Which categories of heir are protected by forced heirship.
+     */
     applicableTo?: 'children_only' | 'children_and_spouse' | 'all_descendants' | 'all_heirs';
+    /**
+     * Rule for deferring forced heirship claims — e.g. life interest to surviving spouse with remainder to children.
+     */
     deferralRule?: string;
+    /**
+     * Date when the applicable forced heirship rules came into force. Important for reform transitions.
+     */
     effectiveDate?: string;
+    /**
+     * The specific legislative reform establishing these rules.
+     */
     reformVersion?: string;
+    /**
+     * Additional notes on forced heirship — exceptions, pending challenges, or reform context.
+     */
     notes?: string;
 };
 
+/**
+ * A court or authority with jurisdiction over this estate or part of it. Plural legal systems may have multiple adjudicating bodies for the same estate.
+ */
 export type AdjudicatingBody = {
+    /**
+     * The type of adjudicating body.
+     */
     type: 'secular_court' | 'religious_court' | 'beth_din' | 'shariah_court' | 'tribal_court' | 'family_court' | 'family_council' | 'community_elders' | 'partition_meeting' | 'karta_decision' | 'maori_land_court' | 'high_court';
+    /**
+     * Name of the specific court or body.
+     */
     name?: string;
+    /**
+     * Jurisdiction this adjudicating body operates in.
+     */
     jurisdiction?: Jurisdiction2;
+    /**
+     * Case or filing reference number.
+     */
     caseReference?: string;
+    /**
+     * Whether this body's decisions are binding. A beth din ruling may be persuasive but not enforceable without secular court recognition.
+     */
     authoritative?: boolean;
 };
 
+/**
+ * A parallel distribution scheme operating alongside the primary estate distribution. Common in plural legal systems where statutory and customary/religious distributions run concurrently.
+ */
 export type ParallelDistribution = {
+    /**
+     * The legal system governing this parallel distribution.
+     */
     system: string;
+    /**
+     * Jurisdiction where this parallel distribution applies.
+     */
     jurisdiction?: Jurisdiction2;
+    /**
+     * Summary of how this system distributes the estate.
+     */
     description?: string;
+    /**
+     * Additional context or conflict notes.
+     */
     notes?: string;
 };
 
+/**
+ * A grant of probate or letters of administration issued by a court. Without a grant, executors have no legal authority to administer the estate.
+ */
 export type ProbateGrant = {
+    /**
+     * The type of grant issued.
+     */
     grantType?: string;
+    /**
+     * Date the grant was issued by the court.
+     */
     grantDate?: string;
+    /**
+     * Court reference number for the grant.
+     */
     grantReference?: string;
+    /**
+     * Name of the court or registry that issued the grant.
+     */
     issuingCourt?: string;
+    /**
+     * Jurisdiction that issued this grant.
+     */
     jurisdiction?: Jurisdiction2;
+    /**
+     * Additional notes about the grant.
+     */
     notes?: string;
 };
 
+/**
+ * Details of the testator's death. Establishes the date from which succession takes effect and the domicile at death (which determines governing law for moveables).
+ */
 export type DeathRecord = {
+    /**
+     * Date of death in ISO 8601 format.
+     */
     dateOfDeath?: string;
+    /**
+     * Place where death occurred.
+     */
     placeOfDeath?: string;
+    /**
+     * Death certificate reference number.
+     */
     deathCertificateRef?: string;
+    /**
+     * The testator's domicile at the time of death. This determines which succession law governs moveable property.
+     */
     domicileAtDeath?: Jurisdiction2;
+    /**
+     * Additional notes about the death record.
+     */
     notes?: string;
 };
 
+/**
+ * A conflict between legal systems regarding succession for this estate. Common in plural jurisdictions and cross-border estates.
+ */
 export type SuccessionConflict = {
+    /**
+     * Summary of the conflict between legal systems.
+     */
     description: string;
+    /**
+     * The legal systems in conflict.
+     */
     systems?: Array<string>;
+    /**
+     * Current status of this conflict.
+     */
     resolutionStatus?: 'unresolved' | 'resolved' | 'pending_court' | 'pending_arbitration';
+    /**
+     * Additional context or resolution details.
+     */
     notes?: string;
 };
 
@@ -332,165 +497,579 @@ export type SuccessionConflict = {
  * The root estate record — will, intestacy, or trust-based succession plan. Contains testator details, jurisdiction, will formalities, forced heirship, probate grants, death record, multi-jurisdiction administration, and tax treaty positions.
  */
 export type Estate2 = {
+    /**
+     * Unique identifier for this estate record.
+     */
     id: string;
+    /**
+     * Reference to the Person.id of the testator (the person whose estate this is).
+     */
     testatorPersonId: string;
+    /**
+     * The lifecycle status of this estate record.
+     */
     status: 'draft' | 'active' | 'locked' | 'archived';
+    /**
+     * Primary jurisdiction governing this estate. For cross-border estates, this is the domiciliary jurisdiction.
+     */
     jurisdiction: Jurisdiction2;
+    /**
+     * The type of will governing this estate. Determines which formality rules apply.
+     */
     willType?: 'secular' | 'religious' | 'dual' | 'composite' | 'oral_witnessed' | 'oral_customary' | 'holographic' | 'notarised' | 'privileged_will';
+    /**
+     * Extension-specific will type not covered by the core enum. Validated by the relevant extension schema.
+     */
     extensionWillType?: string;
+    /**
+     * Links to a companion estate record — either a parallel estate under a different legal system, or a household companion's estate.
+     */
     companionEstateId?: string;
+    /**
+     * Current state of the companion estate link. Absent if the estate has never been linked to a companion.
+     */
+    companionLinkStatus?: 'invited' | 'active' | 'decoupling' | 'decoupled';
+    /**
+     * ISO 8601 date when the companion link became active.
+     */
+    linkedAt?: string;
+    /**
+     * ISO 8601 date when the companion link was severed.
+     */
+    decoupledAt?: string;
+    /**
+     * The primary instrument governing succession for this estate.
+     */
     primaryInstrument?: 'will' | 'revocable_trust' | 'both' | 'intestacy';
+    /**
+     * The default marital property regime for this estate. Determines which assets the testator may freely dispose of.
+     */
     defaultPropertyRegime?: 'community_property' | 'separate_property' | 'equitable_distribution' | 'deferred_community' | 'universal_community' | 'participation_in_acquisitions' | 'islamic_dower';
+    /**
+     * Estimated total value of the estate before liabilities. In minor currency units.
+     */
     totalEstimatedValue?: Money2;
+    /**
+     * Will execution formalities — witnesses, signing method, and compliance checks.
+     */
     attestation?: Attestation2;
+    /**
+     * Record of testamentary capacity assessment for the testator.
+     */
     testamentaryCapacity?: TestamentaryCapacity;
+    /**
+     * Amendments to the will. Each codicil must be executed with proper formalities.
+     */
     codicils?: Array<Codicil>;
+    /**
+     * Document IDs of prior wills or instruments this estate record expressly revokes.
+     */
     revokesDocumentIds?: Array<string>;
+    /**
+     * Whether the will contains a general revocation clause ('I revoke all former wills and testamentary dispositions').
+     */
     revocationClause?: boolean;
+    /**
+     * Forced heirship regime applicable to this estate, if any.
+     */
     forcedHeirship?: ForcedHeirship;
+    /**
+     * Courts and bodies with jurisdiction over this estate. Plural legal systems may involve multiple courts.
+     */
     adjudicatingBodies?: Array<AdjudicatingBody>;
+    /**
+     * Parallel distribution schemes under different legal systems — customary, religious, or statutory.
+     */
     parallelDistributions?: Array<ParallelDistribution>;
+    /**
+     * The probate grant or letters of administration for this estate.
+     */
     probateGrant?: ProbateGrant;
+    /**
+     * Details of the testator's death.
+     */
     deathRecord?: DeathRecord;
+    /**
+     * Known conflicts between legal systems regarding succession for this estate.
+     */
     successionConflicts?: Array<SuccessionConflict>;
+    /**
+     * Choice of law declaration under the Brussels IV Regulation (EU Succession Regulation 650/2012) or equivalent. Allows the testator to choose which jurisdiction's succession law applies.
+     */
     choiceOfLaw?: {
+        /**
+         * The jurisdiction whose law the testator has chosen to govern succession.
+         */
         chosenLaw?: Jurisdiction2;
+        /**
+         * Legal basis for the choice of law.
+         */
         basis?: string;
+        /**
+         * Reference to the document containing the choice of law declaration.
+         */
         documentRef?: string;
     };
+    /**
+     * Surviving spouse's elective share right (US). Allows the spouse to claim a statutory share of the estate regardless of the will's provisions.
+     */
     electiveShareRight?: {
+        /**
+         * Whether elective share is available in this jurisdiction.
+         */
         available?: boolean;
+        /**
+         * The amount elected by the surviving spouse, if the election has been made.
+         */
         electedAmount?: Money2;
+        /**
+         * The statute governing elective share in this jurisdiction.
+         */
         statute?: string;
+        /**
+         * Additional notes on the elective share.
+         */
         notes?: string;
     };
+    /**
+     * A prior matrimonial claim against the estate — typically from a former spouse under a financial order.
+     */
     priorMatrimonialClaim?: {
+        /**
+         * Whether a prior matrimonial claim exists.
+         */
         exists?: boolean;
+        /**
+         * Description of the claim.
+         */
         description?: string;
+        /**
+         * Reference to the Person.id of the claimant.
+         */
         claimantPersonId?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     };
+    /**
+     * In terrorem (no-contest) clause — a provision that a beneficiary forfeits their gift if they challenge the will. Enforceability varies by jurisdiction.
+     */
     noContestClause?: {
+        /**
+         * Whether the will contains a no-contest clause.
+         */
         present?: boolean;
+        /**
+         * Enforceability status in the governing jurisdiction.
+         */
         enforceability?: string;
+        /**
+         * Additional context about the clause.
+         */
         notes?: string;
     };
+    /**
+     * Claims by pretermitted heirs — children born or adopted after the will was executed who are not mentioned in it.
+     */
     pretermittedHeirClaims?: Array<{
+        /**
+         * Reference to the Person.id of the pretermitted heir.
+         */
         claimantPersonId?: string;
+        /**
+         * Current status of this claim.
+         */
         status?: string;
+        /**
+         * Additional context about the claim.
+         */
         notes?: string;
     }>;
+    /**
+     * Claims under the Law Reform (Testamentary Promises) Act 1949 (New Zealand). Allows claims by persons who provided services to the deceased in reliance on a promise of testamentary provision.
+     */
     testamentaryPromises?: Array<{
+        /**
+         * Reference to the Person.id of the claimant.
+         */
         claimantPersonId?: string;
+        /**
+         * Description of the promise made by the testator.
+         */
         promiseDescription?: string;
+        /**
+         * Current status of this claim.
+         */
         status?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     }>;
+    /**
+     * Court power to vary a will to make reasonable financial provision for family and dependants. Applies in England and Wales (Inheritance Act 1975), New Zealand, and similar jurisdictions.
+     */
     judicialVariationPower?: {
+        /**
+         * Whether judicial variation is available in this jurisdiction.
+         */
         available?: boolean;
+        /**
+         * The statute granting variation power.
+         */
         statute?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     };
+    /**
+     * Commorientes rule — the legal presumption for order of death when two or more people die in the same event. Critical for determining which estate inherits from which.
+     */
     commorientesRule?: {
+        /**
+         * Whether the commorientes rule is relevant to this estate.
+         */
         applicable?: boolean;
+        /**
+         * The applicable commorientes rule.
+         */
         rule?: string;
+        /**
+         * Jurisdiction whose commorientes rule applies.
+         */
         jurisdiction?: Jurisdiction2;
+        /**
+         * Additional context — e.g. specific facts of the case.
+         */
         notes?: string;
     };
+    /**
+     * Ancillary probate proceedings in jurisdictions other than the primary domiciliary jurisdiction. Required when the estate includes assets in foreign jurisdictions.
+     */
     ancillaryProbate?: Array<{
+        /**
+         * The jurisdiction where ancillary probate is needed.
+         */
         jurisdiction: Jurisdiction2;
+        /**
+         * Reference to the Person.id of the local fiduciary or administrator.
+         */
         fiduciaryPersonId?: string;
+        /**
+         * Current status of ancillary probate in this jurisdiction.
+         */
         status?: 'not_started' | 'applied' | 'granted' | 'completed' | 'waived';
+        /**
+         * Local grant reference number.
+         */
         grantReference?: string;
+        /**
+         * Name of local legal counsel handling this jurisdiction.
+         */
         localCounsel?: string;
+        /**
+         * Additional notes.
+         */
         notes?: string;
     }>;
+    /**
+     * Registrations of the will with official will registries. Not all jurisdictions have will registries, and registration is rarely compulsory.
+     */
     registrations?: Array<{
+        /**
+         * Name of the will registry.
+         */
         registry: string;
+        /**
+         * Registration reference number.
+         */
         registrationNumber?: string;
+        /**
+         * What the registration covers — may be limited to certain jurisdictions or asset classes.
+         */
         jurisdictionScope?: string;
+        /**
+         * Date the will was registered.
+         */
         registrationDate?: string;
     }>;
+    /**
+     * The currency used for probate reporting and estate accounts. All values in this estate may need converting to this currency.
+     */
     reportingCurrency?: string;
+    /**
+     * Exchange rates used when converting foreign-currency assets to the reporting currency. Document the rate and date to satisfy probate courts.
+     */
     conversionRates?: Array<{
+        /**
+         * Source currency code (ISO 4217).
+         */
         fromCurrency: string;
+        /**
+         * Target currency code (ISO 4217).
+         */
         toCurrency: string;
+        /**
+         * Exchange rate — one unit of fromCurrency equals this many units of toCurrency.
+         */
         rate: number;
+        /**
+         * Date this exchange rate was sourced.
+         */
         rateDate: string;
+        /**
+         * Source of the exchange rate.
+         */
         source?: string;
     }>;
+    /**
+     * Tax treaty positions relevant to the estate. Documents which treaties are being relied upon for double taxation relief.
+     */
     taxTreatyPositions?: Array<{
+        /**
+         * Name of the bilateral tax treaty.
+         */
         treaty: string;
+        /**
+         * The jurisdiction with primary taxing rights under this treaty.
+         */
         primaryTaxingJurisdiction?: Jurisdiction2;
+        /**
+         * Tax credits claimed under this treaty.
+         */
         claimedCredits?: string;
+        /**
+         * The specific treaty article being relied upon.
+         */
         relevantArticle?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     }>;
+    /**
+     * Informational list of practitioner activity codes suggesting the types of professional help this estate may need. Computed from estate complexity, not user-entered.
+     */
     suggestedPractitionerNeeds?: Array<string>;
+    /**
+     * Date this estate record was first created.
+     */
     createdAt: string;
+    /**
+     * Date this estate record was last modified.
+     */
     lastModifiedAt: string;
+    /**
+     * Free-text notes about the estate. Use for anything not captured by structured fields.
+     */
     notes?: string;
-    [key: string]: unknown | string | 'draft' | 'active' | 'locked' | 'archived' | Jurisdiction2 | 'secular' | 'religious' | 'dual' | 'composite' | 'oral_witnessed' | 'oral_customary' | 'holographic' | 'notarised' | 'privileged_will' | string | 'will' | 'revocable_trust' | 'both' | 'intestacy' | 'community_property' | 'separate_property' | 'equitable_distribution' | 'deferred_community' | 'universal_community' | 'participation_in_acquisitions' | 'islamic_dower' | Money2 | Attestation2 | TestamentaryCapacity | Array<Codicil> | Array<string> | boolean | ForcedHeirship | Array<AdjudicatingBody> | Array<ParallelDistribution> | ProbateGrant | DeathRecord | Array<SuccessionConflict> | {
+    [key: string]: unknown | string | 'draft' | 'active' | 'locked' | 'archived' | Jurisdiction2 | 'secular' | 'religious' | 'dual' | 'composite' | 'oral_witnessed' | 'oral_customary' | 'holographic' | 'notarised' | 'privileged_will' | string | 'invited' | 'active' | 'decoupling' | 'decoupled' | string | 'will' | 'revocable_trust' | 'both' | 'intestacy' | 'community_property' | 'separate_property' | 'equitable_distribution' | 'deferred_community' | 'universal_community' | 'participation_in_acquisitions' | 'islamic_dower' | Money2 | Attestation2 | TestamentaryCapacity | Array<Codicil> | Array<string> | boolean | ForcedHeirship | Array<AdjudicatingBody> | Array<ParallelDistribution> | ProbateGrant | DeathRecord | Array<SuccessionConflict> | {
+        /**
+         * The jurisdiction whose law the testator has chosen to govern succession.
+         */
         chosenLaw?: Jurisdiction2;
+        /**
+         * Legal basis for the choice of law.
+         */
         basis?: string;
+        /**
+         * Reference to the document containing the choice of law declaration.
+         */
         documentRef?: string;
     } | {
+        /**
+         * Whether elective share is available in this jurisdiction.
+         */
         available?: boolean;
+        /**
+         * The amount elected by the surviving spouse, if the election has been made.
+         */
         electedAmount?: Money2;
+        /**
+         * The statute governing elective share in this jurisdiction.
+         */
         statute?: string;
+        /**
+         * Additional notes on the elective share.
+         */
         notes?: string;
     } | {
+        /**
+         * Whether a prior matrimonial claim exists.
+         */
         exists?: boolean;
+        /**
+         * Description of the claim.
+         */
         description?: string;
+        /**
+         * Reference to the Person.id of the claimant.
+         */
         claimantPersonId?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     } | {
+        /**
+         * Whether the will contains a no-contest clause.
+         */
         present?: boolean;
+        /**
+         * Enforceability status in the governing jurisdiction.
+         */
         enforceability?: string;
+        /**
+         * Additional context about the clause.
+         */
         notes?: string;
     } | Array<{
+        /**
+         * Reference to the Person.id of the pretermitted heir.
+         */
         claimantPersonId?: string;
+        /**
+         * Current status of this claim.
+         */
         status?: string;
+        /**
+         * Additional context about the claim.
+         */
         notes?: string;
     }> | Array<{
+        /**
+         * Reference to the Person.id of the claimant.
+         */
         claimantPersonId?: string;
+        /**
+         * Description of the promise made by the testator.
+         */
         promiseDescription?: string;
+        /**
+         * Current status of this claim.
+         */
         status?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     }> | {
+        /**
+         * Whether judicial variation is available in this jurisdiction.
+         */
         available?: boolean;
+        /**
+         * The statute granting variation power.
+         */
         statute?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
     } | {
+        /**
+         * Whether the commorientes rule is relevant to this estate.
+         */
         applicable?: boolean;
+        /**
+         * The applicable commorientes rule.
+         */
         rule?: string;
+        /**
+         * Jurisdiction whose commorientes rule applies.
+         */
         jurisdiction?: Jurisdiction2;
+        /**
+         * Additional context — e.g. specific facts of the case.
+         */
         notes?: string;
     } | Array<{
+        /**
+         * The jurisdiction where ancillary probate is needed.
+         */
         jurisdiction: Jurisdiction2;
+        /**
+         * Reference to the Person.id of the local fiduciary or administrator.
+         */
         fiduciaryPersonId?: string;
+        /**
+         * Current status of ancillary probate in this jurisdiction.
+         */
         status?: 'not_started' | 'applied' | 'granted' | 'completed' | 'waived';
+        /**
+         * Local grant reference number.
+         */
         grantReference?: string;
+        /**
+         * Name of local legal counsel handling this jurisdiction.
+         */
         localCounsel?: string;
+        /**
+         * Additional notes.
+         */
         notes?: string;
     }> | Array<{
+        /**
+         * Name of the will registry.
+         */
         registry: string;
+        /**
+         * Registration reference number.
+         */
         registrationNumber?: string;
+        /**
+         * What the registration covers — may be limited to certain jurisdictions or asset classes.
+         */
         jurisdictionScope?: string;
+        /**
+         * Date the will was registered.
+         */
         registrationDate?: string;
     }> | string | Array<{
+        /**
+         * Source currency code (ISO 4217).
+         */
         fromCurrency: string;
+        /**
+         * Target currency code (ISO 4217).
+         */
         toCurrency: string;
+        /**
+         * Exchange rate — one unit of fromCurrency equals this many units of toCurrency.
+         */
         rate: number;
+        /**
+         * Date this exchange rate was sourced.
+         */
         rateDate: string;
+        /**
+         * Source of the exchange rate.
+         */
         source?: string;
     }> | Array<{
+        /**
+         * Name of the bilateral tax treaty.
+         */
         treaty: string;
+        /**
+         * The jurisdiction with primary taxing rights under this treaty.
+         */
         primaryTaxingJurisdiction?: Jurisdiction2;
+        /**
+         * Tax credits claimed under this treaty.
+         */
         claimedCredits?: string;
+        /**
+         * The specific treaty article being relied upon.
+         */
         relevantArticle?: string;
+        /**
+         * Additional context.
+         */
         notes?: string;
-    }> | Array<string> | string | undefined;
+    }> | Array<string> | undefined;
 };
 
 /**
@@ -557,125 +1136,249 @@ export type Identifier2 = {
  * A person involved in the estate. Schema.org name alignment. Any Unicode script. Supports CJK phonetic readings, chieftaincy titles, clan/lineage identifiers, dual legal personalities, and tax residency across multiple jurisdictions.
  */
 export type Person2 = {
+    /**
+     * Unique identifier for this person within the INHERIT document. Must be referenced consistently across all entities.
+     */
     id: string;
     /**
-     * First/given name (Schema.org: givenName)
+     * The person's given (first) name. For cultures where given name follows family name (e.g. Japanese, Chinese), this is still the given name — display ordering is a presentation concern.
      */
     givenName: string;
     /**
-     * Last/family/surname (Schema.org: familyName)
+     * The person's family name (surname). Some cultures do not use family names — Tamil, Icelandic patronymic, and mononymous naming conventions are all valid without this field.
      */
     familyName?: string;
     /**
-     * Middle name(s) (Schema.org: additionalName)
+     * Middle name(s) or additional given names. Multiple middle names should be space-separated.
      */
     additionalName?: string;
     /**
-     * Name the person prefers to be called
+     * Name the person prefers to be called. May differ from legal name — use this for correspondence and display where appropriate.
      */
     preferredName?: string;
+    /**
+     * Phonetic reading of the person's name. Essential for CJK names to ensure correct pronunciation by non-native speakers and systems.
+     */
     phoneticReading?: {
+        /**
+         * Phonetic reading of the given name.
+         */
         givenName?: string;
+        /**
+         * Phonetic reading of the family name.
+         */
         familyName?: string;
+        /**
+         * Phonetic reading of the complete name as a single string.
+         */
         fullName?: string;
     };
+    /**
+     * Formal titles held by this person. Multiple titles are common — a person may hold academic, professional, and traditional titles simultaneously.
+     */
     titles?: Array<{
+        /**
+         * The title text itself.
+         */
         title: string;
         type?: 'chieftaincy' | 'traditional' | 'religious' | 'professional' | 'honorific' | 'clan' | 'academic' | 'military' | 'other';
     }>;
+    /**
+     * Clan, tribe, lineage, or gotra affiliation. In some legal systems (Hindu, customary African), this determines inheritance rights and succession order.
+     */
     clanOrLineage?: string;
     /**
-     * ISO 8601 date of birth
+     * The person's date of birth in ISO 8601 format. Used to determine age-dependent inheritance rights and guardianship requirements.
      */
     dateOfBirth?: string;
     /**
-     * ISO 8601 date of death (if deceased)
+     * The person's date of death in ISO 8601 format, if deceased. Relevant for determining predecease rules, commorientes, and survivorship.
      */
     dateOfDeath?: string;
+    /**
+     * The person's gender. Optional, but required where inheritance rules are gender-dependent (e.g. Islamic faraid, Hindu succession).
+     */
     gender?: 'male' | 'female' | 'non_binary' | 'other' | 'prefer_not_to_say' | 'unknown';
+    /**
+     * The person's legal domicile. Domicile — not nationality or residence — determines which succession law governs moveable property.
+     */
     domicile?: Jurisdiction2;
+    /**
+     * The roles this person plays in the estate. A person may hold multiple roles simultaneously (e.g. beneficiary and executor).
+     */
     roles: Array<'testator' | 'beneficiary' | 'executor' | 'guardian' | 'trustee' | 'witness' | 'attorney' | 'proxy' | 'protector' | 'enforcer'>;
+    /**
+     * Contact details for this person. All fields are optional — some parties may have no known contact information.
+     */
     contact?: {
+        /**
+         * Email address for correspondence.
+         */
         email?: string;
         /**
-         * Phone number (E.164 recommended)
+         * Phone number in E.164 format recommended. National formats are accepted but may be ambiguous across jurisdictions.
          */
         phone?: string;
+        /**
+         * Postal address for this person.
+         */
         address?: Address2;
     };
     /**
-     * External identifiers (passport, national ID, etc.)
+     * External identifiers for this person — passport numbers, national ID, tax reference numbers, etc. Used for probate applications and cross-border identification.
      */
     identifiers?: Array<Identifier2>;
+    /**
+     * The person's name within a religious naming tradition. Required for religious court filings, halachic documents, and Shariah proceedings.
+     */
     ritualName?: {
         /**
-         * The full ritual/religious name
+         * The full ritual or religious name as used in religious proceedings.
          */
         name: string;
         /**
-         * Patronymic element (ben/bat, ibn/bint, etc.)
+         * The patronymic element of the ritual name (ben/bat, ibn/bint, etc.).
          */
         patronymic?: string;
         /**
-         * Naming tradition: hebrew, arabic_nasab, hindu, buddhist, etc.
+         * The religious or cultural naming tradition this name follows.
          */
         nameSystem?: string;
     };
+    /**
+     * Legal personalities this person holds across different legal systems. A single person may have distinct legal identities under statutory, customary, and religious law simultaneously.
+     */
     legalPersonalities?: Array<{
+        /**
+         * The legal system under which this personality exists.
+         */
         system: 'statutory' | 'customary' | 'religious' | 'traditional';
+        /**
+         * The person's role or status within this legal system.
+         */
         role: string;
+        /**
+         * The jurisdiction where this legal personality is recognised.
+         */
         jurisdiction?: Jurisdiction2;
+        /**
+         * Additional context about this legal personality.
+         */
         notes?: string;
     }>;
+    /**
+     * Tax residency declarations for one or more jurisdictions. A person may be simultaneously tax-resident in multiple countries, triggering reporting obligations under FATCA, CRS, and bilateral treaties.
+     */
     taxResidency?: Array<{
+        /**
+         * The jurisdiction where this person is tax-resident.
+         */
         jurisdiction: Jurisdiction2;
+        /**
+         * The person's tax identification number in this jurisdiction.
+         */
         taxpayerIdentifier?: string;
+        /**
+         * Any relevant tax treaty claim that affects estate tax liability in this jurisdiction.
+         */
         treatyPosition?: string;
+        /**
+         * FATCA (Foreign Account Tax Compliance Act) classification for this person.
+         */
         fatcaStatus?: 'us_person' | 'non_us_person' | 'exempt' | 'unknown';
     }>;
     /**
-     * BCP 47 language tag for preferred language
+     * Whether this person record is shared with the companion estate. When true, changes sync between linked estates.
+     */
+    sharedWithCompanion?: boolean;
+    /**
+     * BCP 47 language tag for the person's preferred language. Used for correspondence and document generation.
      */
     language?: string;
+    /**
+     * Free-text notes about this person. Use for anything not captured by structured fields — health conditions, access requirements, or context for professionals.
+     */
     notes?: string;
     [key: string]: unknown | string | string | string | {
+        /**
+         * Phonetic reading of the given name.
+         */
         givenName?: string;
+        /**
+         * Phonetic reading of the family name.
+         */
         familyName?: string;
+        /**
+         * Phonetic reading of the complete name as a single string.
+         */
         fullName?: string;
     } | Array<{
+        /**
+         * The title text itself.
+         */
         title: string;
         type?: 'chieftaincy' | 'traditional' | 'religious' | 'professional' | 'honorific' | 'clan' | 'academic' | 'military' | 'other';
     }> | string | 'male' | 'female' | 'non_binary' | 'other' | 'prefer_not_to_say' | 'unknown' | Jurisdiction2 | Array<'testator' | 'beneficiary' | 'executor' | 'guardian' | 'trustee' | 'witness' | 'attorney' | 'proxy' | 'protector' | 'enforcer'> | {
+        /**
+         * Email address for correspondence.
+         */
         email?: string;
         /**
-         * Phone number (E.164 recommended)
+         * Phone number in E.164 format recommended. National formats are accepted but may be ambiguous across jurisdictions.
          */
         phone?: string;
+        /**
+         * Postal address for this person.
+         */
         address?: Address2;
     } | Array<Identifier2> | {
         /**
-         * The full ritual/religious name
+         * The full ritual or religious name as used in religious proceedings.
          */
         name: string;
         /**
-         * Patronymic element (ben/bat, ibn/bint, etc.)
+         * The patronymic element of the ritual name (ben/bat, ibn/bint, etc.).
          */
         patronymic?: string;
         /**
-         * Naming tradition: hebrew, arabic_nasab, hindu, buddhist, etc.
+         * The religious or cultural naming tradition this name follows.
          */
         nameSystem?: string;
     } | Array<{
+        /**
+         * The legal system under which this personality exists.
+         */
         system: 'statutory' | 'customary' | 'religious' | 'traditional';
+        /**
+         * The person's role or status within this legal system.
+         */
         role: string;
+        /**
+         * The jurisdiction where this legal personality is recognised.
+         */
         jurisdiction?: Jurisdiction2;
+        /**
+         * Additional context about this legal personality.
+         */
         notes?: string;
     }> | Array<{
+        /**
+         * The jurisdiction where this person is tax-resident.
+         */
         jurisdiction: Jurisdiction2;
+        /**
+         * The person's tax identification number in this jurisdiction.
+         */
         taxpayerIdentifier?: string;
+        /**
+         * Any relevant tax treaty claim that affects estate tax liability in this jurisdiction.
+         */
         treatyPosition?: string;
+        /**
+         * FATCA (Foreign Account Tax Compliance Act) classification for this person.
+         */
         fatcaStatus?: 'us_person' | 'non_us_person' | 'exempt' | 'unknown';
-    }> | undefined;
+    }> | boolean | undefined;
 };
 
 /**
@@ -952,6 +1655,10 @@ export type Asset2 = {
      * Links this asset to an asset collection
      */
     collectionId?: string;
+    /**
+     * How this asset relates to a companion estate. Determines sync behaviour and visibility between linked estates.
+     */
+    ownershipCategory?: 'joint' | 'sole_partner_interest' | 'sole_no_partner_interest' | 'sole';
     passesOutsideEstate?: boolean;
     notes?: string;
     [key: string]: unknown | string | string | 'bank_account' | 'savings_account' | 'investment' | 'pension' | 'shares' | 'premium_bonds' | 'cryptocurrency' | 'insurance' | 'vehicle' | 'jewellery' | 'art' | 'antiques' | 'collectibles' | 'furniture' | 'electronics' | 'musical_instruments' | 'books' | 'clothing' | 'kitchenware' | 'sports_equipment' | 'firearms' | 'wine_and_spirits' | 'tools' | 'garden_and_outdoor' | 'business_interest' | 'intellectual_property' | 'domain_name' | 'social_media_account' | 'digital_subscription' | 'sukuk' | 'takaful' | 'islamic_deposit' | 'other' | string | Money2 | string | 'estimated' | 'professional' | 'probate' | 'unknown' | 'excellent' | 'good' | 'fair' | 'poor' | 'unknown' | 'not_applicable' | number | Array<Identifier2> | Array<Photo> | 'possessed_at_death' | 'receivable' | 'contingent' | 'immoveable' | 'moveable' | 'mixed' | 'self_acquired' | 'ancestral_joint' | 'ancestral_severed' | 'inherited' | 'gifted' | 'stridhan' | 'communal' | 'waqf_endowed' | 'formally_registered' | 'informally_held' | 'community_acknowledged' | 'disputed' | 'undocumented' | 'title_deed' | 'certificate_of_occupancy' | 'family_recognition' | 'community_testimony' | 'receipts_only' | 'none' | {
@@ -968,7 +1675,7 @@ export type Asset2 = {
         scope?: 'full_access' | 'limited_access' | 'no_access';
         designatedRecipientPersonId?: string;
         onlineToolDirective?: boolean;
-    } | boolean | undefined;
+    } | 'joint' | 'sole_partner_interest' | 'sole_no_partner_interest' | 'sole' | boolean | undefined;
 };
 
 /**
