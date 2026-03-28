@@ -2094,6 +2094,14 @@ export type Asset2 = {
      */
     description?: string;
     /**
+     * The manufacturer or brand name. Free text — implementations should offer category-aware suggestions from the category guidance reference data, but any value is valid. Brands change over time (acquisitions, rebrands) so this is not an enum.
+     */
+    brand?: string;
+    /**
+     * The specific model, product line, or range name within the brand. Combined with brand and identifiers, this uniquely describes the item to a specialist dealer.
+     */
+    model?: string;
+    /**
      * Date the asset was acquired by the current owner. Used for capital gains tax calculations, insurance claims, and provenance. Maps to Schema.org purchaseDate.
      */
     purchaseDate?: string;

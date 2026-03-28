@@ -3701,6 +3701,28 @@ components:
           examples:
             - OO gauge Hornby R3456 Class 66 locomotive in EWS livery, DCC fitted, with original box and instructions
             - 18ct yellow gold solitaire engagement ring, 1.2ct round brilliant diamond, GIA certified VS1/G
+        brand:
+          type: string
+          description: The manufacturer or brand name. Free text — implementations should offer category-aware suggestions from the category guidance reference data, but any value is valid. Brands change over time (acquisitions, rebrands) so this is not an enum.
+          examples:
+            - Hornby
+            - Bachmann
+            - Rolex
+            - Cartier
+            - Hardy Bros
+            - Steinway
+            - Hermès
+            - Gibson
+        model:
+          type: string
+          description: The specific model, product line, or range name within the brand. Combined with brand and identifiers, this uniquely describes the item to a specialist dealer.
+          examples:
+            - Class 66
+            - Submariner Date
+            - Perfect Reel
+            - Model D Grand Piano
+            - Birkin 25
+            - Les Paul Standard
         purchaseDate:
           type: string
           format: date
